@@ -1,0 +1,1 @@
+var APIDATA = @APIDOC_DATA@;
