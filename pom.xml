@@ -90,11 +90,6 @@
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-json</artifactId>
-            <version>4.6.4</version>
-        </dependency>
         <!-- jackson end -->
     </dependencies>
     <build>
@@ -112,9 +107,6 @@
                         <manifest>
                             <mainClass>org.sherlock.tool.RESTMain</mainClass>
                         </manifest>
-                        <manifestEntries>
-                            <splashscreen-image>org/sherlock/tool/image/logo.gif</splashscreen-image>
-                        </manifestEntries>
                     </archive>
                 </configuration>
                 <executions>

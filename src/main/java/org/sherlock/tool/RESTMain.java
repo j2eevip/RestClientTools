@@ -2,10 +2,10 @@ package org.sherlock.tool;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.sherlock.tool.apidoc.APIUtil;
+import org.sherlock.tool.gui.util.APIUtil;
 import org.sherlock.tool.cache.RESTCache;
 import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.RESTView;
+import org.sherlock.tool.gui.RestView;
 import org.sherlock.tool.gui.menu.MenuBarView;
 import org.sherlock.tool.gui.util.UIUtil;
 import org.sherlock.tool.model.APIDoc;
@@ -40,9 +40,10 @@ public class RESTMain {
     public static void init() {
         MenuBarView mbv = new MenuBarView();
         JFrame frame = new JFrame(RESTConst.REST_CLIENT_VERSION);
+        frame.setContentPane(RestView.getView());
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setJMenuBar(mbv.getJMenuBar());
-        frame.getContentPane().add(RESTView.getView());
         frame.pack();
         frame.setVisible(true);
         frame.addWindowListener(wa);
@@ -53,9 +54,7 @@ public class RESTMain {
 
     public static void openView(String path) {
         RESTCache.setCLIRunning(false);
-        LoadThd loader = new LoadThd(path);
-        loader.setName(RESTConst.LOAD_THREAD);
-        SwingUtilities.invokeLater(loader);
+        SwingUtilities.invokeLater(new LoadThd(path));
     }
 
     public static void closeView() {
@@ -69,7 +68,6 @@ public class RESTMain {
             return;
         }
 
-        RESTUtil.closeSplashScreen();
         String path = RESTConst.EMPTY;
         if (actions.length > 1) {
             path = actions[1];
@@ -99,6 +97,7 @@ public class RESTMain {
     }
 
     public static void main(String[] args) {
+        System.setProperty("java.library.path", "classpath:mac");
         RESTMain.launch(args);
     }
 

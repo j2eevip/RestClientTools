@@ -1,16 +1,18 @@
 package org.sherlock.tool.gui.rsp;
 
-import cn.hutool.json.JSONObject;
+import java.awt.BorderLayout;
+import java.util.Map.Entry;
+import java.util.Set;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.sherlock.tool.constant.RESTConst;
 import org.sherlock.tool.model.HttpRsp;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
-import java.util.Map.Entry;
-import java.util.Set;
 
 public class RspView extends JPanel {
     private static final long serialVersionUID = -1299418241312495718L;
@@ -81,7 +83,10 @@ public class RspView extends JPanel {
 
         txtFldStat.setText(rsp.getStatus());
         pnlRaw.getTxtAra().setText(rsp.getRawTxt());
-        pnlBody.getTxtAra().setText(new JSONObject(rsp.getBody()).toStringPretty());
+        String body = rsp.getBody();
+        if (StringUtils.isNotBlank(body)) {
+            pnlBody.getTxtAra().setText(body);
+        }
 
         // Set headers
         pnlHdr.getTabMdl().clear();

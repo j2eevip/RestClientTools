@@ -1,15 +1,28 @@
 package org.sherlock.tool.gui.menu;
 
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Locale;
+import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.ProgressMonitor;
+import javax.swing.SwingWorker;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sherlock.tool.RESTMain;
-import org.sherlock.tool.apidoc.APIUtil;
 import org.sherlock.tool.cache.RESTCache;
 import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.RESTView;
+import org.sherlock.tool.gui.RestView;
+import org.sherlock.tool.gui.util.APIUtil;
 import org.sherlock.tool.gui.util.UIUtil;
 import org.sherlock.tool.model.APIDoc;
 import org.sherlock.tool.model.HttpHists;
@@ -17,18 +30,6 @@ import org.sherlock.tool.thread.RESTThdPool;
 import org.sherlock.tool.thread.TestThd;
 import org.sherlock.tool.util.RESTUtil;
 import org.sherlock.tool.util.TestUtil;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.util.Locale;
 
 public class MenuBarView implements ActionListener, PropertyChangeListener {
     private static Logger log = LogManager.getLogger(MenuBarView.class);
@@ -47,10 +48,6 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
 
     private TestThd testThrd = null;
 
-    private DonateDialog dd = null;
-
-    private AboutDialog ad = null;
-
     public MenuBarView() {
         this.init();
     }
@@ -60,8 +57,6 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
         JMenu mnEdit = new JMenu(RESTConst.EDIT);
         JMenu mnTest = new JMenu(RESTConst.TEST);
         JMenu mnDoc = new JMenu(StringUtils.capitalize(RESTConst.APIDOC));
-        //JMenu mnTool = new JMenu(RESTConst.TOOLS);
-        JMenu mnHelp = new JMenu(RESTConst.HELP);
 
         // Menu of file
         JMenuItem miImport = new JMenuItem(RESTConst.IMPORT);
@@ -135,27 +130,6 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
         mnDoc.addSeparator();
         mnDoc.add(miOpen);
 
-        // Menu of help
-        JMenuItem miContent = new JMenuItem(RESTConst.HELP_CONTENTS);
-        JMenuItem miIssue = new JMenuItem(RESTConst.REPORT_ISSUE);
-        JMenuItem miDonate = new JMenuItem(RESTConst.DONATE);
-        JMenuItem miAbout = new JMenuItem(RESTConst.ABOUT_TOOL);
-
-        miContent.addActionListener(this);
-        miIssue.addActionListener(this);
-        miDonate.addActionListener(this);
-        miAbout.addActionListener(this);
-
-        mnHelp.add(miContent);
-        mnHelp.add(miIssue);
-        mnHelp.addSeparator();
-        mnHelp.add(miDonate);
-        mnHelp.addSeparator();
-        mnHelp.add(miAbout);
-
-        ad = new AboutDialog();
-        dd = new DonateDialog();
-
         // MenuBar
         mb = new JMenuBar();
         mb.setBorder(BorderFactory.createEtchedBorder());
@@ -163,8 +137,6 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
         mb.add(mnEdit);
         mb.add(mnTest);
         mb.add(mnDoc);
-        // mb.add(mnTool);
-        mb.add(mnHelp);
         fc = new JFileChooser();
     }
 
@@ -174,14 +146,14 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
 
     private void filePerformed(JMenuItem item) {
         if (RESTConst.IMPORT.equals(item.getText())) {
-            String content = UIUtil.openFile(RESTView.getView(), fc);
+            String content = UIUtil.openFile(RestView.getView(), fc);
             HttpHists hists = RESTUtil.toOject(content, HttpHists.class);
             UIUtil.setRESTView(hists);
             return;
         }
 
         if (RESTConst.EXPORT.equals(item.getText())) {
-            UIUtil.saveFile(RESTView.getView(), fc);
+            UIUtil.saveFile(RestView.getView(), fc);
             return;
         }
 
@@ -193,30 +165,30 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
 
     private void editPerformed(JMenuItem item) {
         if (RESTConst.RESET_REQ.equals(item.getText())) {
-            RESTView.getView().getReqView().reset();
+            RestView.getView().getReqView().reset();
             return;
         }
 
         if (RESTConst.RESET_RSP.equals(item.getText())) {
-            RESTView.getView().getRspView().reset();
+            RestView.getView().getRspView().reset();
             return;
         }
 
         if (RESTConst.RESET_ALL.equals(item.getText())) {
-            RESTView.getView().getReqView().reset();
-            RESTView.getView().getRspView().reset();
+            RestView.getView().getReqView().reset();
+            RestView.getView().getRspView().reset();
             return;
         }
 
         if (RESTConst.RM_ALL.equals(item.getText())) {
             JOptionPane.setDefaultLocale(Locale.US);
-            int ret = JOptionPane.showConfirmDialog(RESTView.getView(),
+            int ret = JOptionPane.showConfirmDialog(RestView.getView(),
                     RESTConst.CONFIRM_RM_ALL,
                     RESTConst.RM_ALL,
                     JOptionPane.YES_NO_OPTION);
             if (0 == ret) {
                 RESTCache.getHists().clear();
-                RESTView.getView().getHistView().getTabMdl().clear();
+                RestView.getView().getHistView().getTabMdl().clear();
             }
             return;
         }
@@ -233,7 +205,7 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
 
             HttpHists hists = new HttpHists(RESTCache.getHists().values());
 
-            pm = new ProgressMonitor(RESTView.getView(), RESTConst.TEST_CASE, "", 0, hists.getTotal());
+            pm = new ProgressMonitor(RestView.getView(), RESTConst.TEST_CASE, "", 0, hists.getTotal());
             pm.setProgress(0);
 
             task = new HistTask(hists);
@@ -287,19 +259,7 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
         }
     }
 
-    private void helpPerformed(JMenuItem item) {
-        if (RESTConst.ABOUT_TOOL.equals(item.getText())) {
-            ad.setVisible(true);
-            UIUtil.setLocation(ad);
-            return;
-        }
-
-        if (RESTConst.DONATE.equals(item.getText())) {
-            dd.setVisible(true);
-            UIUtil.setLocation(dd);
-            return;
-        }
-
+    /*private void helpPerformed(JMenuItem item) {
         if (RESTConst.HELP_CONTENTS.equals(item.getText())) {
             try {
                 String path = RESTUtil.replacePath(RESTConst.HELP_DOC);
@@ -328,17 +288,18 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
                 ;
             }
         }
-    }
+    }*/
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         JMenuItem item = (JMenuItem) (e.getSource());
         this.filePerformed(item);
         this.editPerformed(item);
         this.testPerformed(item);
         this.apiDocPerformed(item);
-        this.helpPerformed(item);
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (!RESTConst.PROGRESS.equals(evt.getPropertyName())) {
             return;

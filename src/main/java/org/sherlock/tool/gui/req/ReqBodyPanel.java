@@ -130,14 +130,6 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
         vtContType.add(ContentType.APPLICATION_SVG_XML.getMimeType());
         vtContType.add(ContentType.APPLICATION_OCTET_STREAM.getMimeType());
 
-        Vector<String> vtChrset = new Vector<String>();
-        vtChrset.add(Charsets.UTF_8.getCname());
-        vtChrset.add(Charsets.US_ASCII.getCname());
-        vtChrset.add(Charsets.ISO_8859_1.getCname());
-        vtChrset.add(Charsets.UTF_16.getCname());
-        vtChrset.add(Charsets.UTF_16LE.getCname());
-        vtChrset.add(Charsets.UTF_16BE.getCname());
-
         Vector<String> vtBdyType = new Vector<String>();
         vtBdyType.add(BodyType.STRING.getType());
         vtBdyType.add(BodyType.FILE.getType());
@@ -146,7 +138,7 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
         cbContentType.setEditable(true);
         cbContentType.setToolTipText(RESTConst.CONTENT_TYPE.replace("-", " "));
 
-        cbCharset = new JComboBox<String>(vtChrset);
+        cbCharset = new JComboBox<String>(Charsets.getNames());
         cbCharset.setEditable(true);
         cbCharset.setToolTipText(RESTConst.CHARSET);
 

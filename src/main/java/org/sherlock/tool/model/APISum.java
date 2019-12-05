@@ -1,6 +1,6 @@
 package org.sherlock.tool.model;
 
-import org.sherlock.tool.apidoc.APIUtil;
+import org.sherlock.tool.gui.util.APIUtil;
 
 import java.io.Serializable;
 

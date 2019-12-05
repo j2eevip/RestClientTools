@@ -1,7 +1,7 @@
 package org.sherlock.tool.constant;
 
 public class RESTConst {
-    public static final String REST_CLIENT_VERSION = "RESTClient";
+    public static final String REST_CLIENT_VERSION = "REST测试工具";
 
     public static final String WORK = "work";
 
@@ -11,55 +11,47 @@ public class RESTConst {
 
     public static final String API = "API";
 
-    public static final String sherlock_TOOL = "org/sherlock/tool/";
+    public static final String SHERLOCK_TOOL = "org/sherlock/tool/";
 
-    public static final String ICON_START = sherlock_TOOL + "image/btn_start.png";
+    public static final String ICON_START = SHERLOCK_TOOL + "image/btn_start.png";
 
-    public static final String ICON_ADD = sherlock_TOOL + "image/btn_add.png";
+    public static final String ICON_ADD = SHERLOCK_TOOL + "image/btn_add.png";
 
-    public static final String ICON_DEL = sherlock_TOOL + "image/btn_delete.png";
+    public static final String ICON_DEL = SHERLOCK_TOOL + "image/btn_delete.png";
 
-    public static final String ICON_LOAD_FILE = sherlock_TOOL + "image/btn_load_file.png";
+    public static final String ICON_LOAD_FILE = SHERLOCK_TOOL + "image/btn_load_file.png";
 
-    public static final String ICON_STOP = sherlock_TOOL + "image/btn_stop.png";
+    public static final String ICON_STOP = SHERLOCK_TOOL + "image/btn_stop.png";
 
-    public final static String CAUSE_JSON = sherlock_TOOL + "cause/causes.json";
+    public final static String CAUSE_JSON = SHERLOCK_TOOL + "cause/causes.json";
 
-    public final static String REPORT_HTML = sherlock_TOOL + "report/report.html";
+    public final static String REPORT_HTML = SHERLOCK_TOOL + "report/report.html";
 
-    public final static String REPORT_CSS = sherlock_TOOL + "report/css/report.css";
+    public final static String REPORT_CSS = SHERLOCK_TOOL + "report/css/report.css";
 
-    public final static String REPORT_JS = sherlock_TOOL + "report/js/report.js";
+    public final static String REPORT_JS = SHERLOCK_TOOL + "report/js/report.js";
 
-    public final static String REPORT_JQUERY = sherlock_TOOL + "report/js/jquery-3.1.1.min.js";
+    public final static String REPORT_JQUERY = SHERLOCK_TOOL + "report/js/jquery-3.1.1.min.js";
 
-    public final static String sherlock_TOOL_ORG = sherlock_TOOL + "help/sherlocktool.org";
+    public final static String SHERLOCK_TOOL_USAGE = SHERLOCK_TOOL + "help/sherlocktool.cli.usage";
 
-    public final static String DONATION = sherlock_TOOL + "help/sherlocktool.donate";
+    public static final String LOGO = SHERLOCK_TOOL + "image/logo.png";
 
-    public final static String sherlock_TOOL_USAGE = sherlock_TOOL + "help/sherlocktool.cli.usage";
+    public final static String APIDOC_BTSTRAP_JS = SHERLOCK_TOOL + "apidoc/js/bootstrap.js";
 
-    public static final String LOGO = sherlock_TOOL + "image/logo.png";
+    public final static String APIDOC_JS = SHERLOCK_TOOL + "apidoc/js/apidoc.js";
 
-    public static final String DONATE_ICON = sherlock_TOOL + "image/donate_pay.png";
+    public final static String APIDOC_DATA_JS = SHERLOCK_TOOL + "apidoc/js/apidata.js";
 
-    public static final String HELP_DOC = sherlock_TOOL + "doc/rest-client.pdf";
+    public final static String APIDOC_JQUERY = SHERLOCK_TOOL + "apidoc/js/jquery-3.1.1.min.js";
 
-    public final static String APIDOC_BTSTRAP_JS = sherlock_TOOL + "apidoc/js/bootstrap.js";
+    public final static String APIDOC_CSS = SHERLOCK_TOOL + "apidoc/css/apidoc.css";
 
-    public final static String APIDOC_JS = sherlock_TOOL + "apidoc/js/apidoc.js";
+    public final static String APIDOC_BTSTRAP_CSS = SHERLOCK_TOOL + "apidoc/css/bootstrap.css";
 
-    public final static String APIDOC_DATA_JS = sherlock_TOOL + "apidoc/js/apidata.js";
+    public final static String APIDOC_JSON = SHERLOCK_TOOL + "apidoc/apidoc.json";
 
-    public final static String APIDOC_JQUERY = sherlock_TOOL + "apidoc/js/jquery-3.1.1.min.js";
-
-    public final static String APIDOC_CSS = sherlock_TOOL + "apidoc/css/apidoc.css";
-
-    public final static String APIDOC_BTSTRAP_CSS = sherlock_TOOL + "apidoc/css/bootstrap.css";
-
-    public final static String APIDOC_JSON = sherlock_TOOL + "apidoc/apidoc.json";
-
-    public final static String APIDOC_HTML = sherlock_TOOL + "apidoc/apidoc.html";
+    public final static String APIDOC_HTML = SHERLOCK_TOOL + "apidoc/apidoc.html";
 
     public static final String URL_ISSUE = "https://github.com/sherlock-Projects/rest-client/issues";
 
@@ -115,25 +107,21 @@ public class RESTConst {
 
     public static final String BODY_TYPE = "Body-Type";
 
-    public static final String STRING = "String";
-
     public static final String FILE = "File";
 
-    public static final String HTTP_REQUEST = "HTTP Request";
+    public static final String HTTP_REQUEST = "Request";
 
-    public static final String HTTP_RESPONSE = "HTTP Response";
+    public static final String HTTP_RESPONSE = "Response";
 
-    public static final String HTTP_REQ_HEADER = "HTTP Request Header";
+    public static final String HTTP_REQ_HEADER = "Request Header";
 
-    public static final String HTTP_REQ_BODY = "HTTP Request Body";
+    public static final String HTTP_REQ_BODY = "Request Body";
 
-    public static final String HTTP_REP_BODY = "HTTP Response Body";
+    public static final String HTTP_REP_BODY = "Response Body";
 
-    public static final String HTTP_STATUS = "HTTP Status";
+    public static final String HTTP_STATUS = "Status";
 
-    public static final String REST_CLIENT = "HTTP RESTClient";
-
-    public static final String HTTP_HISTORY = "HTTP History";
+    public static final String HTTP_HISTORY = "History";
 
     public static final String BODY_CONTENT = "Body Content";
 
@@ -147,13 +135,7 @@ public class RESTConst {
 
     public static final String DATE = "Date";
 
-    public static final String SIZE = "Size";
-
     public static final String TIME = "Time";
-
-    public static final String RESULT = "Result";
-
-    public static final String RUN = "Run";
 
     public static final String CLEAR = "Clear";
 
@@ -185,19 +167,9 @@ public class RESTConst {
 
     public static final String EDIT = "Edit";
 
-    public static final String HELP = "Help";
-
-    public static final String TOOLS = "Tools";
-
     public static final String CREATE = "Create";
 
     public static final String OPEN = "Open";
-
-    public static final String HELP_CONTENTS = "Help Contents";
-
-    public static final String REPORT_ISSUE = "Report Issue";
-
-    public static final String ABOUT_TOOL = "About Tool";
 
     public static final String API_DOCUMENT = "API Documentation";
 
@@ -207,11 +179,7 @@ public class RESTConst {
 
     public static final String HDR_TAG = "-- HEADERS  --";
 
-    public static final String CKI_TAG = "-- COOKIE  --";
-
     public static final String BDY_TAG = "--   BODY   --";
-
-    public static final String CONTENT_LEN = "Content-Length";
 
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss.SSS";
 
@@ -227,7 +195,6 @@ public class RESTConst {
 
     public static final String RM_ALL = "Remove All";
 
-    public static final String UNASSERT_BODY = "Unassert Body";
 
     public static final String ASSERT_BODY = "Assert Body";
 

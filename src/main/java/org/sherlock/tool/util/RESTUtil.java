@@ -1,7 +1,28 @@
 package org.sherlock.tool.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 import net.htmlparser.jericho.Source;
 import net.htmlparser.jericho.SourceFormatter;
 import org.apache.commons.codec.Charsets;
@@ -11,23 +32,22 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dom4j.*;
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.sherlock.tool.cache.RESTCache;
 import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.model.*;
-
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.*;
-import java.util.Map.Entry;
+import org.sherlock.tool.model.Cause;
+import org.sherlock.tool.model.Causes;
+import org.sherlock.tool.model.ErrCode;
+import org.sherlock.tool.model.HttpHist;
+import org.sherlock.tool.model.HttpHists;
+import org.sherlock.tool.model.HttpRsp;
+import org.sherlock.tool.model.Results;
 
 public class RESTUtil {
     private static Logger log = LogManager.getLogger(RESTUtil.class);
@@ -422,7 +442,7 @@ public class RESTUtil {
 
     public static String replacePath(String path) {
         return StringUtils.replaceOnce(path,
-                RESTConst.sherlock_TOOL,
+                RESTConst.SHERLOCK_TOOL,
                 RESTConst.WORK + File.separatorChar);
     }
 
@@ -649,24 +669,12 @@ public class RESTUtil {
 
     public static void printUsage() {
         try {
-            InputStream is = RESTUtil.getInputStream(RESTConst.sherlock_TOOL_USAGE);
+            InputStream is = RESTUtil.getInputStream(RESTConst.SHERLOCK_TOOL_USAGE);
             String jsTxt = IOUtils.toString(is, Charsets.UTF_8);
             RESTUtil.close(is);
             System.out.println(jsTxt);
         } catch (Exception e) {
             log.error("Failed to read help file.", e);
-        }
-    }
-
-    public static void closeSplashScreen() {
-        SplashScreen ss = SplashScreen.getSplashScreen();
-        if (null == ss) {
-            return;
-        }
-        try {
-            ss.close();
-        } catch (Exception e) {
-            // Ignore this exception
         }
     }
 

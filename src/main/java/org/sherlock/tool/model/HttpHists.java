@@ -2,7 +2,7 @@ package org.sherlock.tool.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.collections.CollectionUtils;
-import org.sherlock.tool.gui.RESTView;
+import org.sherlock.tool.gui.RestView;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,7 +45,7 @@ public class HttpHists implements Serializable {
 
         Object dscr = null;
         this.hists = new ArrayList<HttpHist>();
-        Map<String, Object> dscrCols = RESTView.getView().getHistView().getTabMdl().getColumn(5);
+        Map<String, Object> dscrCols = RestView.getView().getHistView().getTabMdl().getColumn(5);
 
         for (HttpHist h : histLst) {
             HttpHist hist = new HttpHist(h);

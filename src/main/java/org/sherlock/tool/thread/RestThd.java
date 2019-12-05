@@ -4,14 +4,18 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.RESTView;
+import org.sherlock.tool.gui.RestView;
 import org.sherlock.tool.gui.req.ReqView;
 import org.sherlock.tool.gui.util.UIUtil;
 import org.sherlock.tool.util.RESTClient;
 
-public class RESTThd extends Thread {
-    private static Logger log = LogManager.getLogger(RESTThd.class);
+/**
+ * @author Sherlock
+ */
+public class RestThd extends Thread {
+    private static Logger log = LogManager.getLogger(RestThd.class);
 
+    @Override
     public void interrupt() {
         try {
             RESTClient.getInstance().close();
@@ -21,8 +25,9 @@ public class RESTThd extends Thread {
         }
     }
 
+    @Override
     public void run() {
-        ReqView rv = RESTView.getView().getReqView();
+        ReqView rv = RestView.getView().getReqView();
         UIUtil.submit(rv);
 
         rv.getBtnStart().setIcon(rv.getIconStart());
@@ -32,12 +37,11 @@ public class RESTThd extends Thread {
         rv.getProgressBar().setVisible(false);
         rv.getProgressBar().setIndeterminate(false);
 
-        String body = RESTView.getView().getRspView().getBodyView().getTxtAra().getText();
-        RESTView.getView().getTabPane().setSelectedIndex(1);
+        String body = RestView.getView().getRspView().getBodyView().getTxtAra().getText();
         if (StringUtils.isNotEmpty(body)) {
-            RESTView.getView().getRspView().getTabPane().setSelectedIndex(0);
+            RestView.getView().getRspView().getTabPane().setSelectedIndex(0);
         } else {
-            RESTView.getView().getRspView().getTabPane().setSelectedIndex(2);
+            RestView.getView().getRspView().getTabPane().setSelectedIndex(2);
         }
 
     }

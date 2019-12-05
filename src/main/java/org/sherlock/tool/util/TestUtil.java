@@ -77,7 +77,7 @@ public final class TestUtil {
 
             is = RESTUtil.getInputStream(RESTConst.LOGO);
             String rpath = RESTUtil.getPath(RESTConst.REPORT);
-            String logoPath = StringUtils.replaceOnce(RESTConst.LOGO, RESTConst.sherlock_TOOL, rpath);
+            String logoPath = StringUtils.replaceOnce(RESTConst.LOGO, RESTConst.SHERLOCK_TOOL, rpath);
             FileUtils.copyInputStreamToFile(is, new File(logoPath));
             RESTUtil.close(is);
 

@@ -1,5 +1,6 @@
 package org.sherlock.tool.gui.util;
 
+import javax.swing.border.Border;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
@@ -9,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sherlock.tool.cache.RESTCache;
 import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.RESTView;
+import org.sherlock.tool.gui.RestView;
 import org.sherlock.tool.gui.common.TabModel;
 import org.sherlock.tool.gui.req.ReqView;
 import org.sherlock.tool.model.*;
@@ -120,20 +121,20 @@ public class UIUtil {
         }
 
         // Clear old data
-        RESTView.getView().getReqView().reset();
-        RESTView.getView().getRspView().reset();
-        RESTView.getView().getHistView().getTabMdl().clear();
+        RestView.getView().getReqView().reset();
+        RestView.getView().getRspView().reset();
+        RestView.getView().getHistView().getTabMdl().clear();
         RESTCache.getHists().clear();
 
         // Set with new data
         List<HttpHist> histLst = hists.getHists();
         for (HttpHist h : histLst) {
-            RESTView.getView().getHistView().setHistView(h);
+            RestView.getView().getHistView().setHistView(h);
         }
 
         HttpHist lastHist = histLst.get(histLst.size() - 1);
-        RESTView.getView().getReqView().setReqView(lastHist.getReq());
-        RESTView.getView().getRspView().setRspView(lastHist.getRsp());
+        RestView.getView().getReqView().setReqView(lastHist.getReq());
+        RestView.getView().getRspView().setRspView(lastHist.getRsp());
     }
 
     public static String contents(String filename) {
@@ -149,12 +150,13 @@ public class UIUtil {
     }
 
     public static void submit(ReqView rv) {
-        String url = (String) rv.getCbUrl().getSelectedItem();
+        String url = rv.getCbUrl();
         if (StringUtils.isBlank(url)) {
             return;
         }
+        String requestUrl = rv.getBaseUrl() + url;
 
-        HttpMethod method = (HttpMethod) rv.getCbMtd().getSelectedItem();
+        HttpMethod method = rv.getCbMtd();
         String btype = (String) rv.getPnlBody().getCbBodyType().getSelectedItem();
         String charset = (String) rv.getPnlBody().getCbCharset().getSelectedItem();
         String ctype = (String) rv.getPnlBody().getCbContentType().getSelectedItem();
@@ -175,15 +177,13 @@ public class UIUtil {
         Map<String, String> headers = UIUtil.getValuePair(rv.getPnlHdr().getTabMdl().getValues());
         Map<String, String> cookies = UIUtil.getValuePair(rv.getPnlCookie().getTabMdl().getValues());
         headers.put(RESTConst.CONTENT_TYPE, ctype + "; charset=" + charset);
-        if (null == headers.get(RESTConst.ACCEPT)) {
-            headers.put(RESTConst.ACCEPT, RESTConst.ACCEPT_TYPE);
-        }
+        headers.putIfAbsent(RESTConst.ACCEPT, RESTConst.ACCEPT_TYPE);
 
-        HttpReq req = new HttpReq(method, url, body, headers, cookies);
+        HttpReq req = new HttpReq(method, requestUrl, body, headers, cookies);
         HttpRsp rsp = RESTClient.getInstance().exec(req);
 
-        RESTView.getView().getRspView().setRspView(rsp);
-        RESTView.getView().getHistView().setHistView(req, rsp);
+        RestView.getView().getRspView().setRspView(rsp);
+        RestView.getView().getHistView().setHistView(url, req, rsp);
     }
 
     public static void setLocation(Component c) {
@@ -200,15 +200,11 @@ public class UIUtil {
     }
 
     public static void setHistTabWidth(JTable tab) {
-        int width[] = {0, 340, 81, 180, 50, 0};
+        int width[] = {0, 340, 80, 150, 50, 300};
         TableColumnModel cols = tab.getColumnModel();
         for (int i = 0; i < width.length; i++) {
-            if (width[i] < 0) {
-                continue;
-            }
-
             TableColumn col = cols.getColumn(i);
-            if (i == 1 || i == 2 /*|| i == 4 || i == 5*/) {
+            if (i == 1 || i == 2) {
                 col.setMinWidth(width[i]);
                 continue;
             }
@@ -244,7 +240,7 @@ public class UIUtil {
         }
 
         Object dscr = null;
-        Map<String, Object> dscrCols = RESTView.getView().getHistView().getTabMdl().getColumn(5);
+        Map<String, Object> dscrCols = RestView.getView().getHistView().getTabMdl().getColumn(5);
         for (HttpHist h : RESTCache.getHists().values()) {
             // Update description field
             dscr = dscrCols.get(h.getKey());
@@ -333,7 +329,7 @@ public class UIUtil {
     public static void showMessage(final String msg, final String title) {
         if (!RESTCache.isCLIRunning()) {
             JOptionPane.setDefaultLocale(Locale.US);
-            JOptionPane.showMessageDialog(RESTView.getView(),
+            JOptionPane.showMessageDialog(RestView.getView(),
                     msg,
                     title,
                     JOptionPane.INFORMATION_MESSAGE);
@@ -394,5 +390,9 @@ public class UIUtil {
         for (int r = 0; r < tree.getRowCount(); r++) {
             tree.collapseRow(r);
         }
+    }
+
+    public static Border getEmptyBorder() {
+        return BorderFactory.createEmptyBorder(0, 0, 0, 0);
     }
 }

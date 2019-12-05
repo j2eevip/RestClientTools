@@ -1,22 +1,10 @@
-package org.sherlock.tool.gui.hist;
+package org.sherlock.tool.gui.json;
 
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.RESTView;
-import org.sherlock.tool.gui.common.TabModel;
-import org.sherlock.tool.gui.json.JSONTree;
-import org.sherlock.tool.gui.util.UIUtil;
-import org.sherlock.tool.model.HttpHist;
-import org.sherlock.tool.model.HttpMethod;
-import org.sherlock.tool.model.HttpReq;
-import org.sherlock.tool.model.HttpRsp;
-import org.sherlock.tool.util.RESTUtil;
-
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -25,6 +13,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
+import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.gui.RestView;
+import org.sherlock.tool.gui.common.TabModel;
+import org.sherlock.tool.gui.hist.HistView;
+import org.sherlock.tool.gui.util.UIUtil;
+import org.sherlock.tool.model.HttpHist;
+import org.sherlock.tool.model.HttpMethod;
+import org.sherlock.tool.model.HttpReq;
+import org.sherlock.tool.model.HttpRsp;
+import org.sherlock.tool.util.RESTUtil;
 
 public class HistFrame extends JFrame implements ActionListener, ChangeListener {
     private static final long serialVersionUID = 1394380599441039862L;
@@ -316,7 +332,7 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
         rep.setBody(this.taRepBody.getText());
 
         // Update history view
-        HistView hv = RESTView.getView().getHistView();
+        HistView hv = RestView.getView().getHistView();
         UIUtil.setSelectedHist(this.hist, hv.getTable(), hv.getTabMdl());
     }
 

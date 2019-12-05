@@ -1,5 +1,20 @@
 package org.sherlock.tool.gui.req;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
+import java.util.Map.Entry;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTabbedPane;
+import javax.swing.border.TitledBorder;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -8,15 +23,7 @@ import org.sherlock.tool.constant.RESTConst;
 import org.sherlock.tool.gui.util.UIUtil;
 import org.sherlock.tool.model.HttpMethod;
 import org.sherlock.tool.model.HttpReq;
-import org.sherlock.tool.thread.RESTThd;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Map;
-import java.util.Map.Entry;
+import org.sherlock.tool.thread.RestThd;
 
 public class ReqView extends JPanel implements ActionListener {
     private static final long serialVersionUID = -1299418241312495718L;
@@ -27,6 +34,7 @@ public class ReqView extends JPanel implements ActionListener {
 
     private ImageIcon iconStop = null;
 
+    private JComboBox<String> cbBaseUrl = null;
     private JComboBox<String> cbUrl = null;
 
     private JComboBox<HttpMethod> cbMtd = null;
@@ -43,7 +51,7 @@ public class ReqView extends JPanel implements ActionListener {
 
     private Panel pnlUrl = null;
 
-    private RESTThd reqThd = null;
+    private RestThd reqThd = null;
 
     public ReqView() {
         this.init();
@@ -57,12 +65,15 @@ public class ReqView extends JPanel implements ActionListener {
         return iconStop;
     }
 
-    public JComboBox<String> getCbUrl() {
-        return cbUrl;
+    public String getBaseUrl() {
+        return (String) cbBaseUrl.getSelectedItem();
+    }
+    public String getCbUrl() {
+        return (String) cbUrl.getSelectedItem();
     }
 
-    public JComboBox<HttpMethod> getCbMtd() {
-        return cbMtd;
+    public HttpMethod getCbMtd() {
+        return (HttpMethod) cbMtd.getSelectedItem();
     }
 
     public JButton getBtnStart() {
@@ -108,13 +119,25 @@ public class ReqView extends JPanel implements ActionListener {
         cbMtd.setToolTipText(RESTConst.METHOD);
         cbMtd.addActionListener(this);
 
+        cbBaseUrl = new JComboBox<String>();
+        cbBaseUrl.setEditable(false);
+        cbBaseUrl.requestFocus();
+        cbBaseUrl.addItem("http://localhost:8088");
+        cbBaseUrl.addItem("http://comms-ibss-rest.t1.ums86.com");
+        cbBaseUrl.addItem("http://comms-ibss-rest.d1.ums86.com");
+        cbBaseUrl.addItem("https://comms-ibss-rest.ums86.com");
+
         cbUrl = new JComboBox<String>();
         cbUrl.setEditable(true);
         cbUrl.setToolTipText(RESTConst.URL);
         cbUrl.requestFocus();
 
         pnlUrl.add(cbMtd, BorderLayout.WEST);
-        pnlUrl.add(cbUrl, BorderLayout.CENTER);
+        Panel pnlBaseUrl = new Panel();
+        pnlBaseUrl.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlBaseUrl.add(cbBaseUrl, BorderLayout.WEST);
+        pnlBaseUrl.add(cbUrl, BorderLayout.CENTER);
+        pnlUrl.add(pnlBaseUrl, BorderLayout.CENTER);
         pnlUrl.add(btnStart, BorderLayout.EAST);
 
         this.add(pnlUrl, BorderLayout.NORTH);
@@ -259,7 +282,7 @@ public class ReqView extends JPanel implements ActionListener {
             this.btnStart.setToolTipText(RESTConst.STOP);
             this.btnStart.setEnabled(false);
 
-            this.reqThd = new RESTThd();
+            this.reqThd = new RestThd();
             this.reqThd.setName(RESTConst.REQ_THREAD);
             this.reqThd.start();
 

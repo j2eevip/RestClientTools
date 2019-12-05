@@ -1,11 +1,24 @@
 package org.sherlock.tool.util;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -15,21 +28,11 @@ import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.common.RESTTrustManager;
+import org.sherlock.tool.gui.common.RestTrustManager;
 import org.sherlock.tool.model.Charsets;
 import org.sherlock.tool.model.HttpMethod;
 import org.sherlock.tool.model.HttpReq;
 import org.sherlock.tool.model.HttpRsp;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 public final class RESTClient {
     private static Logger log = LogManager.getLogger(RESTClient.class);
@@ -46,17 +49,13 @@ public final class RESTClient {
         SSLContext sc = null;
         try {
             sc = SSLContext.getInstance(RESTConst.TLS);
-            TrustManager[] trustAllCrts = new TrustManager[]{new RESTTrustManager()};
+            TrustManager[] trustAllCrts = new TrustManager[]{new RestTrustManager()};
             sc.init(null, trustAllCrts, null);
         } catch (Exception e) {
             log.error("Failed to initialize trust all certificates.", e);
         }
 
-        HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String arg0, SSLSession arg1) {
-                return true;
-            }
-        };
+        HostnameVerifier hv = (arg0, arg1) -> true;
 
         rc = RequestConfig.custom()
                 .setConnectTimeout(RESTConst.TIME_OUT)

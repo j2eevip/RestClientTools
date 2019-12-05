@@ -1,4 +1,4 @@
-package org.sherlock.tool.apidoc;
+package org.sherlock.tool.gui.util;
 
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.collections.CollectionUtils;
@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.sherlock.tool.cache.RESTCache;
 import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.util.UIUtil;
 import org.sherlock.tool.model.*;
 import org.sherlock.tool.util.RESTUtil;
 
@@ -113,7 +112,7 @@ public final class APIUtil {
             // Copy LOGO
             is = RESTUtil.getInputStream(RESTConst.LOGO);
             String apath = RESTUtil.getPath(RESTConst.APIDOC);
-            String logoPath = StringUtils.replaceOnce(RESTConst.LOGO, RESTConst.sherlock_TOOL, apath);
+            String logoPath = StringUtils.replaceOnce(RESTConst.LOGO, RESTConst.SHERLOCK_TOOL, apath);
             FileUtils.copyInputStreamToFile(is, new File(logoPath));
             RESTUtil.close(is);
 

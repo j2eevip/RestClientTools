@@ -7,6 +7,9 @@ import javax.swing.table.AbstractTableModel;
 import java.util.*;
 import java.util.Map.Entry;
 
+/**
+ * @author Sherlock
+ */
 public class TabModel extends AbstractTableModel {
     private static final long serialVersionUID = 69634209639612612L;
 
@@ -23,14 +26,17 @@ public class TabModel extends AbstractTableModel {
         this.colNames = colNames;
     }
 
+    @Override
     public String getColumnName(int cidx) {
         return colNames.get(cidx);
     }
 
+    @Override
     public int getRowCount() {
         return tabData.size();
     }
 
+    @Override
     public int getColumnCount() {
         if (null == colNames) {
             return 0;
@@ -38,6 +44,7 @@ public class TabModel extends AbstractTableModel {
         return colNames.size();
     }
 
+    @Override
     public Object getValueAt(int row, int col) {
         List<Object> rowLst = this.getRow(row);
         if (CollectionUtils.isEmpty(rowLst)) {
@@ -49,6 +56,7 @@ public class TabModel extends AbstractTableModel {
         return rowLst.get(col);
     }
 
+    @Override
     public void setValueAt(Object value, int row, int col) {
         List<Object> rowLst = this.getRow(row);
         if (CollectionUtils.isEmpty(rowLst)) {
@@ -80,6 +88,7 @@ public class TabModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    @Override
     public boolean isCellEditable(int row, int col) {
         return editable;
     }
@@ -88,6 +97,7 @@ public class TabModel extends AbstractTableModel {
         this.editable = editable;
     }
 
+    @Override
     public Class<?> getColumnClass(int c) {
         Object val = this.getValueAt(0, c);
         if (null == val) {
@@ -97,10 +107,7 @@ public class TabModel extends AbstractTableModel {
     }
 
     public String insertRow(Object... values) {
-        List<Object> rowLst = new ArrayList<Object>();
-        for (Object value : values) {
-            rowLst.add(value);
-        }
+        List<Object> rowLst = Arrays.asList(values);
 
         String key = UUID.randomUUID().toString();
         tabData.put(key, rowLst);
@@ -130,7 +137,7 @@ public class TabModel extends AbstractTableModel {
             return columns;
         }
 
-        List<Object> valLst = null;
+        List<Object> valLst;
         Set<Entry<String, List<Object>>> es = tabData.entrySet();
         for (Entry<String, List<Object>> e : es) {
             valLst = e.getValue();

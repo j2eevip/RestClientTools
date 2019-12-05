@@ -1,20 +1,7 @@
 package org.sherlock.tool.gui.hist;
 
-import org.apache.commons.lang.StringUtils;
-import org.sherlock.tool.cache.RESTCache;
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.RESTView;
-import org.sherlock.tool.gui.common.TabModel;
-import org.sherlock.tool.gui.util.UIUtil;
-import org.sherlock.tool.model.HttpHist;
-import org.sherlock.tool.model.HttpReq;
-import org.sherlock.tool.model.HttpRsp;
-
-import javax.swing.*;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,7 +10,31 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.BorderFactory;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import org.apache.commons.lang.StringUtils;
+import org.sherlock.tool.cache.RESTCache;
+import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.gui.RestView;
+import org.sherlock.tool.gui.common.TabModel;
+import org.sherlock.tool.gui.json.HistFrame;
+import org.sherlock.tool.gui.util.UIUtil;
+import org.sherlock.tool.model.HttpHist;
+import org.sherlock.tool.model.HttpReq;
+import org.sherlock.tool.model.HttpRsp;
 
+/**
+ * @author Sherlock
+ */
 public class HistView extends JPanel implements ActionListener, ListSelectionListener {
     private static final long serialVersionUID = -1299418241312495718L;
 
@@ -79,10 +90,6 @@ public class HistView extends JPanel implements ActionListener, ListSelectionLis
 
                 miEdit.setEnabled(true);
             }
-
-            if (e.isPopupTrigger()) {
-                pm.show(e.getComponent(), e.getX(), e.getY());
-            }
         }
 
         @Override
@@ -110,27 +117,8 @@ public class HistView extends JPanel implements ActionListener, ListSelectionLis
 
     private void init() {
         this.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH));
-        this.setBorder(BorderFactory.createEmptyBorder(RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH));
-
-        List<String> colNames = new ArrayList<String>();
-        colNames.add(RESTConst.ID);
-        colNames.add(RESTConst.REQUEST);
-        colNames.add(RESTConst.RESPONSE);
-        colNames.add(RESTConst.DATE);
-        colNames.add(RESTConst.TIME);
-        colNames.add(RESTConst.DESCR);
-
-        tabMdl = new TabModel(colNames);
-        tabMdl.setCellEditable(false);
-        tab = new JTable(tabMdl);
-        tab.setFillsViewportHeight(true);
-        tab.setAutoCreateRowSorter(false);
-        tab.getTableHeader().setReorderingAllowed(false);
-        tab.addMouseListener(ma);
-        tab.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        tab.getSelectionModel().addListSelectionListener(this);
-        UIUtil.setHistTabWidth(tab);
-
+        this.setBorder(UIUtil.getEmptyBorder());
+        this.setPreferredSize(new Dimension(300, 600));
         miRmSel = new JMenuItem(RESTConst.RM_SEL);
         miRmSel.setName(RESTConst.RM_SEL);
         miRmSel.addActionListener(this);
@@ -167,30 +155,46 @@ public class HistView extends JPanel implements ActionListener, ListSelectionLis
         pm.add(miRmSel);
         pm.add(miRmAll);
 
-        JPanel pnlCenter = new JPanel();
-        pnlCenter.setLayout(new GridLayout(1, 1));
-        JScrollPane sp = new JScrollPane(tab);
-        pnlCenter.add(sp);
+        List<String> colNames = new ArrayList<String>();
+        colNames.add(RESTConst.ID);
+        colNames.add(RESTConst.REQUEST);
+        colNames.add(RESTConst.RESPONSE);
+        colNames.add(RESTConst.DATE);
+        colNames.add(RESTConst.TIME);
+        colNames.add(RESTConst.DESCR);
 
-        this.add(pnlCenter, BorderLayout.CENTER);
+        tabMdl = new TabModel(colNames);
+        tabMdl.setCellEditable(false);
+        tab = new JTable(tabMdl);
+        UIUtil.setHistTabWidth(tab);
+        tab.setFillsViewportHeight(false);
+        tab.setAutoCreateRowSorter(false);
+        tab.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tab.getTableHeader().setReorderingAllowed(false);
+        tab.addMouseListener(ma);
+        tab.setComponentPopupMenu(pm);
+        tab.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        tab.getSelectionModel().addListSelectionListener(this);
+        JScrollPane sp = new JScrollPane();
+        sp.getViewport().add(tab);
+        this.add(sp, BorderLayout.CENTER);
         this.setBorder(BorderFactory.createTitledBorder(null, RESTConst.HTTP_HISTORY, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
     }
 
-    public void setHistView(HttpReq req, HttpRsp rsp) {
+    public void setHistView(String reqVal, HttpReq req, HttpRsp rsp) {
         if (StringUtils.isEmpty(rsp.getStatus())) {
             return;
         }
 
-        String reqVal = req.getMethod() + " " + req.getUrl();
         String time = rsp.getTime() + "ms";
 
         int rc = this.tabMdl.getRowCount();
         String key = this.tabMdl.insertRow(rc + 1,
-                reqVal,
-                rsp.getStatus(),
-                rsp.getDate(),
-                time,
-                StringUtils.EMPTY);
+            reqVal,
+            rsp.getStatus(),
+            rsp.getDate(),
+            time,
+            req.getBody());
 
         HttpHist hist = new HttpHist(key, req, rsp);
         RESTCache.getHists().put(key, hist);
@@ -219,6 +223,7 @@ public class HistView extends JPanel implements ActionListener, ListSelectionLis
         RESTCache.getHists().put(key, hist);
     }
 
+    @Override
     public void valueChanged(ListSelectionEvent e) {
         if (e.getValueIsAdjusting()) {
             return;
@@ -236,10 +241,11 @@ public class HistView extends JPanel implements ActionListener, ListSelectionLis
             return;
         }
 
-        RESTView.getView().getReqView().setReqView(hist.getReq());
-        RESTView.getView().getRspView().setRspView(hist.getRsp());
+        RestView.getView().getReqView().setReqView(hist.getReq());
+        RestView.getView().getRspView().setRspView(hist.getRsp());
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         JMenuItem item = (JMenuItem) (e.getSource());
         if (RESTConst.RM_SEL.equals(item.getName())) {
@@ -249,7 +255,7 @@ public class HistView extends JPanel implements ActionListener, ListSelectionLis
 
         if (RESTConst.RM_ALL.equals(item.getName())) {
             JOptionPane.setDefaultLocale(Locale.US);
-            int ret = JOptionPane.showConfirmDialog(RESTView.getView(),
+            int ret = JOptionPane.showConfirmDialog(RestView.getView(),
                     RESTConst.CONFIRM_RM_ALL,
                     RESTConst.RM_ALL,
                     JOptionPane.YES_NO_OPTION);

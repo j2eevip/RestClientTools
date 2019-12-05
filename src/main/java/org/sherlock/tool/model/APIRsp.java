@@ -2,7 +2,7 @@ package org.sherlock.tool.model;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
-import org.sherlock.tool.apidoc.APIUtil;
+import org.sherlock.tool.gui.util.APIUtil;
 import org.sherlock.tool.constant.RESTConst;
 import org.sherlock.tool.util.RESTUtil;
 

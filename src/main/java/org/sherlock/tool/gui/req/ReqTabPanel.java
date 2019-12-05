@@ -2,7 +2,7 @@ package org.sherlock.tool.gui.req;
 
 import org.apache.commons.lang.StringUtils;
 import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.RESTView;
+import org.sherlock.tool.gui.RestView;
 import org.sherlock.tool.gui.common.TabModel;
 import org.sherlock.tool.gui.util.UIUtil;
 
@@ -200,7 +200,7 @@ public class ReqTabPanel extends JPanel implements ActionListener {
 
         if (RESTConst.RM_ALL.equals(item.getName())) {
             JOptionPane.setDefaultLocale(Locale.US);
-            int ret = JOptionPane.showConfirmDialog(RESTView.getView(),
+            int ret = JOptionPane.showConfirmDialog(RestView.getView(),
                     RESTConst.CONFIRM_RM_ALL,
                     RESTConst.RM_ALL,
                     JOptionPane.YES_NO_OPTION);
