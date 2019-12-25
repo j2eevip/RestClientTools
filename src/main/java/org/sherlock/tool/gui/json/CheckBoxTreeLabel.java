@@ -1,10 +1,15 @@
 package org.sherlock.tool.gui.json;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import javax.swing.Icon;
+import javax.swing.JLabel;
+import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
-import java.awt.*;
 
 public class CheckBoxTreeLabel extends JLabel {
+
     private static final long serialVersionUID = -32204214662253992L;
 
     private boolean selected;

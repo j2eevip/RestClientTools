@@ -1,14 +1,14 @@
 package org.sherlock.tool.model;
 
+import java.io.Serializable;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.gui.util.APIUtil;
-import org.sherlock.tool.constant.RESTConst;
 import org.sherlock.tool.util.RESTUtil;
 
-import java.io.Serializable;
-
 public class APIReq implements Serializable {
+
     private static final long serialVersionUID = 1681002160195520948L;
 
     /**
@@ -35,8 +35,8 @@ public class APIReq implements Serializable {
         }
 
         if (StringUtils.isEmpty(req.getBody())) {
-            this.model = RESTConst.NA;
-            this.example = RESTConst.NA;
+            this.model = RestConst.NA;
+            this.example = RestConst.NA;
         } else {
             this.model = StringEscapeUtils.escapeHtml(RESTUtil.toModel(req.getBody()));
             this.example = StringEscapeUtils.escapeHtml(RESTUtil.format(req.getBody()));

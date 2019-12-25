@@ -39,8 +39,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-import org.sherlock.tool.cache.RESTCache;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.cache.RestCache;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.model.Cause;
 import org.sherlock.tool.model.Causes;
 import org.sherlock.tool.model.ErrCode;
@@ -50,6 +50,7 @@ import org.sherlock.tool.model.HttpRsp;
 import org.sherlock.tool.model.Results;
 
 public class RESTUtil {
+
     private static Logger log = LogManager.getLogger(RESTUtil.class);
 
     public static <T> T toOject(File jf, Class<T> clas) {
@@ -208,7 +209,7 @@ public class RESTUtil {
             return false;
         }
 
-        if (StringUtils.containsIgnoreCase(html, RESTConst.HTML_LABEL)) {
+        if (StringUtils.containsIgnoreCase(html, RestConst.HTML_LABEL)) {
             return true;
         }
 
@@ -264,10 +265,10 @@ public class RESTUtil {
             // Writer
             StringWriter sw = new StringWriter();
             new SourceFormatter(new Source(html))
-                    .setIndentString("    ")
-                    .setTidyTags(true)
-                    .setCollapseWhiteSpace(true)
-                    .writeTo(sw);
+                .setIndentString("    ")
+                .setTidyTags(true)
+                .setCollapseWhiteSpace(true)
+                .writeTo(sw);
             return sw.toString();
         } catch (Exception e) {
             log.error("Failed to format html.", e);
@@ -313,7 +314,7 @@ public class RESTUtil {
     }
 
     public static String nowDate() {
-        SimpleDateFormat fmat = new SimpleDateFormat(RESTConst.DATE_FORMAT);
+        SimpleDateFormat fmat = new SimpleDateFormat(RestConst.DATE_FORMAT);
         return fmat.format(new Date());
     }
 
@@ -339,7 +340,7 @@ public class RESTUtil {
             return c;
         }
 
-        Causes cs = RESTCache.getCauses();
+        Causes cs = RestCache.getCauses();
         if (null == cs || MapUtils.isEmpty(cs.getCauses())) {
             return c;
         }
@@ -442,13 +443,13 @@ public class RESTUtil {
 
     public static String replacePath(String path) {
         return StringUtils.replaceOnce(path,
-                RESTConst.SHERLOCK_TOOL,
-                RESTConst.WORK + File.separatorChar);
+            RestConst.SHERLOCK_TOOL,
+            RestConst.WORK + File.separatorChar);
     }
 
     public static String getPath(String subPath) {
         StringBuilder sb = new StringBuilder();
-        sb.append(RESTConst.WORK).append(File.separatorChar);
+        sb.append(RestConst.WORK).append(File.separatorChar);
 
         if (StringUtils.isNotEmpty(subPath)) {
             sb.append(subPath).append(File.separatorChar);
@@ -497,8 +498,8 @@ public class RESTUtil {
         }
 
         if (e.isJsonObject()) {
-            String line = RESTConst.LINE;
-            String type = RESTConst.UNKNOWN;
+            String line = RestConst.LINE;
+            String type = RestConst.UNKNOWN;
             String spaces = "    ";
             String vertLine = "│   ";
 
@@ -548,8 +549,8 @@ public class RESTUtil {
 
         String spaces = "    ";
         String vertLine = "│   ";
-        String line = RESTConst.LINE;
-        String type = RESTConst.UNKNOWN;
+        String line = RestConst.LINE;
+        String type = RestConst.UNKNOWN;
         String indent = dup(layer, spaces);
 
         layer++;
@@ -575,9 +576,9 @@ public class RESTUtil {
 
             /* Element */
             sb.append(indent).append(line)
-                    .append(ce.getName()).append(" [")
-                    .append(type.toLowerCase())
-                    .append("]").append(lines(1));
+                .append(ce.getName()).append(" [")
+                .append(type.toLowerCase())
+                .append("]").append(lines(1));
 
             /* Attributes */
             if (ce.attributeCount() > 0) {
@@ -595,10 +596,10 @@ public class RESTUtil {
                         type = String.class.getSimpleName();
                     }
 
-                    sb.append(indent).append(RESTConst.LINE)
-                            .append(a.getName()).append(" [")
-                            .append(type.toLowerCase())
-                            .append("]").append(lines(1));
+                    sb.append(indent).append(RestConst.LINE)
+                        .append(a.getName()).append(" [")
+                        .append(type.toLowerCase())
+                        .append("]").append(lines(1));
                 }
             }
 
@@ -648,11 +649,12 @@ public class RESTUtil {
         if (StringUtils.isNotEmpty(path)) {
             fhist = new File(path);
             if (!fhist.exists()) {
-                System.out.println("The historical file " + path + " does not exist, will use default " + RESTConst.HTTP_HIST_JSON);
-                fhist = new File(RESTConst.HTTP_HIST_JSON);
+                System.out.println(
+                    "The historical file " + path + " does not exist, will use default " + RestConst.HTTP_HIST_JSON);
+                fhist = new File(RestConst.HTTP_HIST_JSON);
             }
         } else {
-            fhist = new File(RESTConst.HTTP_HIST_JSON);
+            fhist = new File(RestConst.HTTP_HIST_JSON);
         }
 
         if (!fhist.exists()) {
@@ -669,7 +671,7 @@ public class RESTUtil {
 
     public static void printUsage() {
         try {
-            InputStream is = RESTUtil.getInputStream(RESTConst.SHERLOCK_TOOL_USAGE);
+            InputStream is = RESTUtil.getInputStream(RestConst.SHERLOCK_TOOL_USAGE);
             String jsTxt = IOUtils.toString(is, Charsets.UTF_8);
             RESTUtil.close(is);
             System.out.println(jsTxt);

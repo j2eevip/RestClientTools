@@ -3,16 +3,16 @@ package org.sherlock.tool.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.sherlock.tool.constant.RESTConst;
-
 import java.io.Serializable;
 import java.util.Locale;
+import org.sherlock.tool.constant.RestConst;
 
 /**
  * @ClassName: Cause
  * @Description: Test cause
  */
 public class Cause implements Serializable {
+
     private static final long serialVersionUID = 6630167190284292762L;
 
     /**
@@ -82,7 +82,7 @@ public class Cause implements Serializable {
 
         sb.append("The cause of the error/failure: ");
         sb.append(code.getCode()).append(" -- ");
-        if (RESTConst.LANG_ZH.equalsIgnoreCase(Locale.getDefault().getLanguage())) {
+        if (RestConst.LANG_ZH.equalsIgnoreCase(Locale.getDefault().getLanguage())) {
             sb.append(msgZhCN);
         } else {
             sb.append(msgEnUS);

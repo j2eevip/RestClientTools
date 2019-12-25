@@ -11,10 +11,11 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.model.HttpRsp;
 
 public class RspView extends JPanel {
+
     private static final long serialVersionUID = -1299418241312495718L;
 
     private JLabel lblStat = null;
@@ -42,31 +43,34 @@ public class RspView extends JPanel {
     }
 
     private void init() {
-        this.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH));
-        this.setBorder(BorderFactory.createEmptyBorder(RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH));
+        this.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, RestConst.BORDER_WIDTH));
+        this.setBorder(BorderFactory
+            .createEmptyBorder(RestConst.BORDER_WIDTH, RestConst.BORDER_WIDTH, RestConst.BORDER_WIDTH,
+                RestConst.BORDER_WIDTH));
 
-        lblStat = new JLabel(RESTConst.STATUS + ":");
-        txtFldStat = new JTextField(RESTConst.FIELD_STATUS_SIZE);
+        lblStat = new JLabel(RestConst.STATUS + ":");
+        txtFldStat = new JTextField(RestConst.FIELD_STATUS_SIZE);
         txtFldStat.setEditable(false);
 
         JPanel pnlNorth = new JPanel();
-        pnlNorth.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlNorth.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
         pnlNorth.add(lblStat, BorderLayout.WEST);
         pnlNorth.add(txtFldStat, BorderLayout.CENTER);
         this.add(pnlNorth, BorderLayout.NORTH);
 
         tp = new JTabbedPane();
-        pnlBody = new RspTextPanel(RESTConst.BODY);
-        tp.add(RESTConst.BODY, pnlBody);
+        pnlBody = new RspTextPanel(RestConst.BODY);
+        tp.add(RestConst.BODY, pnlBody);
 
-        pnlHdr = new RspTabPanel(RESTConst.HEADER);
-        tp.add(RESTConst.HEADER, pnlHdr);
+        pnlHdr = new RspTabPanel(RestConst.HEADER);
+        tp.add(RestConst.HEADER, pnlHdr);
 
-        pnlRaw = new RspTextPanel(RESTConst.RAW);
-        tp.add(RESTConst.RAW, pnlRaw);
+        pnlRaw = new RspTextPanel(RestConst.RAW);
+        tp.add(RestConst.RAW, pnlRaw);
 
         this.add(tp, BorderLayout.CENTER);
-        this.setBorder(BorderFactory.createTitledBorder(null, RESTConst.HTTP_RESPONSE, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
+        this.setBorder(BorderFactory
+            .createTitledBorder(null, RestConst.HTTP_RESPONSE, TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION));
     }
 
     public void reset() {

@@ -1,14 +1,18 @@
 package org.sherlock.tool.gui.rsp;
 
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.common.TabModel;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import org.sherlock.tool.constant.RestConst;
+import org.sherlock.tool.gui.common.TabModel;
 
 public class RspTabPanel extends JPanel {
+
     private static final long serialVersionUID = -1299418241312495718L;
 
     private TabModel tabMdl = null;
@@ -24,11 +28,11 @@ public class RspTabPanel extends JPanel {
     }
 
     private void init(String name) {
-        this.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        this.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
 
         List<String> colNames = new ArrayList<String>();
         colNames.add(name);
-        colNames.add(RESTConst.VALUE);
+        colNames.add(RestConst.VALUE);
 
         tabMdl = new TabModel(colNames);
         tab = new JTable(tabMdl);

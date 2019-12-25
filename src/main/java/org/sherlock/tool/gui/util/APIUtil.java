@@ -1,5 +1,18 @@
 package org.sherlock.tool.gui.util;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -10,24 +23,25 @@ import org.apache.http.ReasonPhraseCatalog;
 import org.apache.http.impl.EnglishReasonPhraseCatalog;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.sherlock.tool.cache.RESTCache;
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.model.*;
+import org.sherlock.tool.cache.RestCache;
+import org.sherlock.tool.constant.RestConst;
+import org.sherlock.tool.model.APIDoc;
+import org.sherlock.tool.model.APIItem;
+import org.sherlock.tool.model.APIReq;
+import org.sherlock.tool.model.APIRsp;
+import org.sherlock.tool.model.APISum;
+import org.sherlock.tool.model.HttpHist;
+import org.sherlock.tool.model.HttpHists;
+import org.sherlock.tool.model.HttpMethod;
 import org.sherlock.tool.util.RESTUtil;
 
-import java.awt.*;
-import java.io.File;
-import java.io.InputStream;
-import java.util.List;
-import java.util.*;
-import java.util.Map.Entry;
-
 public final class APIUtil {
+
     private static Logger log = LogManager.getLogger(APIUtil.class);
 
     public static APIDoc getAPIDoc(Collection<HttpHist> hists) {
         APIDoc doc = null;
-        InputStream is = RESTUtil.getInputStream(RESTConst.APIDOC_JSON);
+        InputStream is = RESTUtil.getInputStream(RestConst.APIDOC_JSON);
         doc = RESTUtil.toOject(is, APIDoc.class);
         RESTUtil.close(is);
 
@@ -67,7 +81,7 @@ public final class APIUtil {
     }
 
     public static synchronized APIDoc getAPIDoc() {
-        Collection<HttpHist> hists = RESTCache.getHists().values();
+        Collection<HttpHist> hists = RestCache.getHists().values();
         APIDoc doc = getAPIDoc(hists);
         return doc;
     }
@@ -75,52 +89,52 @@ public final class APIUtil {
     public static synchronized void apiDoc(APIDoc doc) {
         try {
             // Update JS
-            InputStream is = RESTUtil.getInputStream(RESTConst.APIDOC_DATA_JS);
+            InputStream is = RESTUtil.getInputStream(RestConst.APIDOC_DATA_JS);
             String jsTxt = IOUtils.toString(is, Charsets.UTF_8);
             String jsonDoc = RESTUtil.tojsonText(doc);
-            jsTxt = StringUtils.replace(jsTxt, RESTConst.LABEL_APIDOC_DATA, jsonDoc);
-            FileUtils.write(new File(RESTUtil.replacePath(RESTConst.APIDOC_DATA_JS)), jsTxt, Charsets.UTF_8);
+            jsTxt = StringUtils.replace(jsTxt, RestConst.LABEL_APIDOC_DATA, jsonDoc);
+            FileUtils.write(new File(RESTUtil.replacePath(RestConst.APIDOC_DATA_JS)), jsTxt, Charsets.UTF_8);
             RESTUtil.close(is);
 
             // Copy JS
-            is = RESTUtil.getInputStream(RESTConst.APIDOC_JS);
-            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RESTConst.APIDOC_JS)));
+            is = RESTUtil.getInputStream(RestConst.APIDOC_JS);
+            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RestConst.APIDOC_JS)));
             RESTUtil.close(is);
 
-            is = RESTUtil.getInputStream(RESTConst.APIDOC_BTSTRAP_JS);
-            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RESTConst.APIDOC_BTSTRAP_JS)));
+            is = RESTUtil.getInputStream(RestConst.API_DOC_BTSTRAP_JS);
+            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RestConst.API_DOC_BTSTRAP_JS)));
             RESTUtil.close(is);
 
-            is = RESTUtil.getInputStream(RESTConst.REPORT_JQUERY);
-            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RESTConst.APIDOC_JQUERY)));
+            is = RESTUtil.getInputStream(RestConst.REPORT_JQUERY);
+            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RestConst.APIDOC_JQUERY)));
             RESTUtil.close(is);
 
             // Copy HTML
-            is = RESTUtil.getInputStream(RESTConst.APIDOC_HTML);
-            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RESTConst.APIDOC_HTML)));
+            is = RESTUtil.getInputStream(RestConst.APIDOC_HTML);
+            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RestConst.APIDOC_HTML)));
             RESTUtil.close(is);
 
             // Copy CSS
-            is = RESTUtil.getInputStream(RESTConst.APIDOC_CSS);
-            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RESTConst.APIDOC_CSS)));
+            is = RESTUtil.getInputStream(RestConst.APIDOC_CSS);
+            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RestConst.APIDOC_CSS)));
             RESTUtil.close(is);
 
-            is = RESTUtil.getInputStream(RESTConst.APIDOC_BTSTRAP_CSS);
-            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RESTConst.APIDOC_BTSTRAP_CSS)));
+            is = RESTUtil.getInputStream(RestConst.APIDOC_BTSTRAP_CSS);
+            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RestConst.APIDOC_BTSTRAP_CSS)));
             RESTUtil.close(is);
 
             // Copy LOGO
-            is = RESTUtil.getInputStream(RESTConst.LOGO);
-            String apath = RESTUtil.getPath(RESTConst.APIDOC);
-            String logoPath = StringUtils.replaceOnce(RESTConst.LOGO, RESTConst.SHERLOCK_TOOL, apath);
+            is = RESTUtil.getInputStream(RestConst.LOGO);
+            String apath = RESTUtil.getPath(RestConst.APIDOC);
+            String logoPath = StringUtils.replaceOnce(RestConst.LOGO, RestConst.SHERLOCK_TOOL, apath);
             FileUtils.copyInputStreamToFile(is, new File(logoPath));
             RESTUtil.close(is);
 
             try {
                 // Open API document
-                Desktop.getDesktop().open(new File(RESTUtil.replacePath(RESTConst.APIDOC_HTML)));
+                Desktop.getDesktop().open(new File(RESTUtil.replacePath(RestConst.APIDOC_HTML)));
             } catch (Exception e) {
-                UIUtil.showMessage(RESTConst.MSG_APIDOC, RESTConst.API_DOCUMENT);
+                UIUtil.showMessage(RestConst.MSG_APIDOC, RestConst.API_DOCUMENT);
             }
 
         } catch (Throwable e) {
@@ -133,8 +147,8 @@ public final class APIUtil {
             return StringUtils.EMPTY;
         }
 
-        url = StringUtils.removeStartIgnoreCase(url, RESTConst.HTTP_HEAD);
-        url = StringUtils.removeStartIgnoreCase(url, RESTConst.HTTPS_HEAD);
+        url = StringUtils.removeStartIgnoreCase(url, RestConst.HTTP_HEAD);
+        url = StringUtils.removeStartIgnoreCase(url, RestConst.HTTPS_HEAD);
         url = "/" + StringUtils.substringAfter(url, "/");
         String path = StringUtils.substringBefore(url, "?");
         return path;
@@ -149,7 +163,7 @@ public final class APIUtil {
         String[] subUrls = StringUtils.split(getShortPath(url), '/');
         for (String subUrl : subUrls) {
             if (StringUtils.isNotEmpty(subUrl) && StringUtils.isNumeric(subUrl)) {
-                sbUrl.append('/').append(RESTConst.PATH_PARAM);
+                sbUrl.append('/').append(RestConst.PATH_PARAM);
                 continue;
             }
             sbUrl.append('/').append(subUrl);
@@ -167,8 +181,8 @@ public final class APIUtil {
         for (String param : params) {
             attrName = StringUtils.substringBefore(param, "=");
             sbUrl.append(attrName)
-                    .append('=').append(StringUtils.replace(RESTConst.PATH_PARAM, "id", attrName))
-                    .append('&');
+                .append('=').append(StringUtils.replace(RestConst.PATH_PARAM, "id", attrName))
+                .append('&');
         }
 
         return StringUtils.removeEnd(sbUrl.toString(), "&");
@@ -236,7 +250,7 @@ public final class APIUtil {
         Set<Entry<String, String>> es = hdr.entrySet();
         for (Entry<String, String> e : es) {
             sb.append(e.toString().replaceFirst("=", " : "))
-                    .append(RESTUtil.lines(1));
+                .append(RESTUtil.lines(1));
         }
         return sb.toString();
     }

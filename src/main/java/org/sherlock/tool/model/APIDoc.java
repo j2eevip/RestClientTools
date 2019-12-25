@@ -1,7 +1,6 @@
 package org.sherlock.tool.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,6 +9,7 @@ import java.util.List;
  * @Description: RESTful API Document model
  */
 public class APIDoc implements Serializable {
+
     private static final long serialVersionUID = 6134938535376261029L;
 
     /**

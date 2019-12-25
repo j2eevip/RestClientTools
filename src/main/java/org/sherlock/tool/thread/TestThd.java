@@ -3,7 +3,11 @@ package org.sherlock.tool.thread;
 import org.sherlock.tool.model.HttpHists;
 import org.sherlock.tool.util.TestUtil;
 
+/**
+ * @author Sherlock
+ */
 public class TestThd extends Thread {
+
     private HttpHists hists = null;
 
     public TestThd(HttpHists hists) {
@@ -18,6 +22,7 @@ public class TestThd extends Thread {
         this.hists = hists;
     }
 
+    @Override
     public void run() {
         if (null == hists) {
             return;

@@ -18,20 +18,23 @@ import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.sherlock.tool.RESTMain;
-import org.sherlock.tool.cache.RESTCache;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.RestMain;
+import org.sherlock.tool.cache.RestCache;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.gui.RestView;
 import org.sherlock.tool.gui.util.APIUtil;
 import org.sherlock.tool.gui.util.UIUtil;
 import org.sherlock.tool.model.APIDoc;
 import org.sherlock.tool.model.HttpHists;
-import org.sherlock.tool.thread.RESTThdPool;
 import org.sherlock.tool.thread.TestThd;
 import org.sherlock.tool.util.RESTUtil;
 import org.sherlock.tool.util.TestUtil;
 
+/**
+ * @author Sherlock
+ */
 public class MenuBarView implements ActionListener, PropertyChangeListener {
+
     private static Logger log = LogManager.getLogger(MenuBarView.class);
 
     private JMenuBar mb = null;
@@ -53,21 +56,21 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
     }
 
     private void init() {
-        JMenu mnFile = new JMenu(RESTConst.FILE);
-        JMenu mnEdit = new JMenu(RESTConst.EDIT);
-        JMenu mnTest = new JMenu(RESTConst.TEST);
-        JMenu mnDoc = new JMenu(StringUtils.capitalize(RESTConst.APIDOC));
+        JMenu mnFile = new JMenu(RestConst.FILE);
+        JMenu mnEdit = new JMenu(RestConst.EDIT);
+        JMenu mnTest = new JMenu(RestConst.TEST);
+        JMenu mnDoc = new JMenu(StringUtils.capitalize(RestConst.APIDOC));
 
         // Menu of file
-        JMenuItem miImport = new JMenuItem(RESTConst.IMPORT);
-        JMenuItem miExport = new JMenuItem(RESTConst.EXPORT);
-        JMenuItem miExit = new JMenuItem(RESTConst.EXIT);
+        JMenuItem miImport = new JMenuItem(RestConst.IMPORT);
+        JMenuItem miExport = new JMenuItem(RestConst.EXPORT);
+        JMenuItem miExit = new JMenuItem(RestConst.EXIT);
 
         miImport.addActionListener(this);
-        miImport.setToolTipText(RESTConst.IMPORT + " " + RESTConst.HIST);
+        miImport.setToolTipText(RestConst.IMPORT + " " + RestConst.HIST);
 
         miExport.addActionListener(this);
-        miExport.setToolTipText(RESTConst.EXPORT + " " + RESTConst.HIST);
+        miExport.setToolTipText(RestConst.EXPORT + " " + RestConst.HIST);
         miExit.addActionListener(this);
 
         mnFile.add(miImport);
@@ -76,19 +79,19 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
         mnFile.add(miExit);
 
         // Menu of edit
-        JMenuItem miResetReq = new JMenuItem(RESTConst.RESET_REQ);
-        JMenuItem miResetRsp = new JMenuItem(RESTConst.RESET_RSP);
-        JMenuItem miResetAll = new JMenuItem(RESTConst.RESET_ALL);
-        JMenuItem miRmHist = new JMenuItem(RESTConst.RM_ALL);
+        JMenuItem miResetReq = new JMenuItem(RestConst.RESET_REQ);
+        JMenuItem miResetRsp = new JMenuItem(RestConst.RESET_RSP);
+        JMenuItem miResetAll = new JMenuItem(RestConst.RESET_ALL);
+        JMenuItem miRmHist = new JMenuItem(RestConst.RM_ALL);
 
         miResetReq.addActionListener(this);
         miResetRsp.addActionListener(this);
 
         miResetAll.addActionListener(this);
-        miResetAll.setToolTipText(RESTConst.RESET + " " + RESTConst.REQUEST + " & " + RESTConst.RESPONSE);
+        miResetAll.setToolTipText(RestConst.RESET + " " + RestConst.REQUEST + " & " + RestConst.RESPONSE);
 
         miRmHist.addActionListener(this);
-        miRmHist.setToolTipText(RESTConst.RM_ALL + " " + RESTConst.HIST);
+        miRmHist.setToolTipText(RestConst.RM_ALL + " " + RestConst.HIST);
 
         mnEdit.add(miResetReq);
         mnEdit.add(miResetRsp);
@@ -97,18 +100,18 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
         mnEdit.add(miRmHist);
 
         // Menu of test
-        miStart = new JMenuItem(RESTConst.START_TEST);
-        miStop = new JMenuItem(RESTConst.STOP_TEST);
-        JMenuItem miReport = new JMenuItem(RESTConst.TEST_REPORT);
+        miStart = new JMenuItem(RestConst.START_TEST);
+        miStop = new JMenuItem(RestConst.STOP_TEST);
+        JMenuItem miReport = new JMenuItem(RestConst.TEST_REPORT);
 
-        miStart.setToolTipText(RESTConst.START_TEST + " " + RESTConst.HIST);
+        miStart.setToolTipText(RestConst.START_TEST + " " + RestConst.HIST);
         miStart.addActionListener(this);
 
-        miStop.setToolTipText(RESTConst.STOP_TEST + " " + RESTConst.HIST);
+        miStop.setToolTipText(RestConst.STOP_TEST + " " + RestConst.HIST);
         miStop.addActionListener(this);
         miStop.setEnabled(false);
 
-        miReport.setToolTipText(RESTConst.DISPLAY + " " + RESTConst.TEST_REPORT);
+        miReport.setToolTipText(RestConst.DISPLAY + " " + RestConst.TEST_REPORT);
         miReport.addActionListener(this);
 
         mnTest.add(miStart);
@@ -117,13 +120,13 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
         mnTest.add(miReport);
 
         // Menu of API DOC
-        JMenuItem miCreate = new JMenuItem(RESTConst.CREATE);
-        JMenuItem miOpen = new JMenuItem(RESTConst.OPEN);
+        JMenuItem miCreate = new JMenuItem(RestConst.CREATE);
+        JMenuItem miOpen = new JMenuItem(RestConst.OPEN);
 
-        miCreate.setToolTipText(RESTConst.CREATE + " " + RESTConst.API_DOCUMENT);
+        miCreate.setToolTipText(RestConst.CREATE + " " + RestConst.API_DOCUMENT);
         miCreate.addActionListener(this);
 
-        miOpen.setToolTipText(RESTConst.OPEN + " " + RESTConst.API_DOCUMENT);
+        miOpen.setToolTipText(RestConst.OPEN + " " + RestConst.API_DOCUMENT);
         miOpen.addActionListener(this);
 
         mnDoc.add(miCreate);
@@ -145,49 +148,49 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
     }
 
     private void filePerformed(JMenuItem item) {
-        if (RESTConst.IMPORT.equals(item.getText())) {
+        if (RestConst.IMPORT.equals(item.getText())) {
             String content = UIUtil.openFile(RestView.getView(), fc);
             HttpHists hists = RESTUtil.toOject(content, HttpHists.class);
             UIUtil.setRESTView(hists);
             return;
         }
 
-        if (RESTConst.EXPORT.equals(item.getText())) {
+        if (RestConst.EXPORT.equals(item.getText())) {
             UIUtil.saveFile(RestView.getView(), fc);
             return;
         }
 
-        if (RESTConst.EXIT.equals(item.getText())) {
-            RESTMain.closeView();
+        if (RestConst.EXIT.equals(item.getText())) {
+            RestMain.closeView();
             return;
         }
     }
 
     private void editPerformed(JMenuItem item) {
-        if (RESTConst.RESET_REQ.equals(item.getText())) {
+        if (RestConst.RESET_REQ.equals(item.getText())) {
             RestView.getView().getReqView().reset();
             return;
         }
 
-        if (RESTConst.RESET_RSP.equals(item.getText())) {
+        if (RestConst.RESET_RSP.equals(item.getText())) {
             RestView.getView().getRspView().reset();
             return;
         }
 
-        if (RESTConst.RESET_ALL.equals(item.getText())) {
+        if (RestConst.RESET_ALL.equals(item.getText())) {
             RestView.getView().getReqView().reset();
             RestView.getView().getRspView().reset();
             return;
         }
 
-        if (RESTConst.RM_ALL.equals(item.getText())) {
+        if (RestConst.RM_ALL.equals(item.getText())) {
             JOptionPane.setDefaultLocale(Locale.US);
             int ret = JOptionPane.showConfirmDialog(RestView.getView(),
-                    RESTConst.CONFIRM_RM_ALL,
-                    RESTConst.RM_ALL,
-                    JOptionPane.YES_NO_OPTION);
+                RestConst.CONFIRM_RM_ALL,
+                RestConst.RM_ALL,
+                JOptionPane.YES_NO_OPTION);
             if (0 == ret) {
-                RESTCache.getHists().clear();
+                RestCache.getHists().clear();
                 RestView.getView().getHistView().getTabMdl().clear();
             }
             return;
@@ -195,17 +198,17 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
     }
 
     private void testPerformed(JMenuItem item) {
-        if (RESTConst.START_TEST.equals(item.getText())) {
-            if (MapUtils.isEmpty(RESTCache.getHists())) {
+        if (RestConst.START_TEST.equals(item.getText())) {
+            if (MapUtils.isEmpty(RestCache.getHists())) {
                 return;
             }
 
             miStart.setEnabled(false);
             miStop.setEnabled(true);
 
-            HttpHists hists = new HttpHists(RESTCache.getHists().values());
+            HttpHists hists = new HttpHists(RestCache.getHists().values());
 
-            pm = new ProgressMonitor(RestView.getView(), RESTConst.TEST_CASE, "", 0, hists.getTotal());
+            pm = new ProgressMonitor(RestView.getView(), RestConst.TEST_CASE, "", 0, hists.getTotal());
             pm.setProgress(0);
 
             task = new HistTask(hists);
@@ -213,11 +216,11 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
             task.execute();
 
             testThrd = new TestThd(hists);
-            testThrd.setName(RESTConst.TEST_THREAD);
-            RESTThdPool.getInstance().getPool().submit(testThrd);
+            testThrd.setName(RestConst.TEST_THREAD);
+            testThrd.start();
         }
 
-        if (RESTConst.STOP_TEST.equals(item.getText())) {
+        if (RestConst.STOP_TEST.equals(item.getText())) {
             if (null == testThrd) {
                 return;
             }
@@ -237,33 +240,33 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
             }
         }
 
-        if (RESTConst.TEST_REPORT.equals(item.getText())) {
-            TestUtil.open(RESTConst.REPORT_HTML,
-                    RESTConst.MSG_REPORT,
-                    RESTConst.TEST_REPORT);
+        if (RestConst.TEST_REPORT.equals(item.getText())) {
+            TestUtil.open(RestConst.REPORT_HTML,
+                RestConst.MSG_REPORT,
+                RestConst.TEST_REPORT);
         }
 
     }
 
     private void apiDocPerformed(JMenuItem item) {
-        if (RESTConst.CREATE.equals(item.getText())) {
+        if (RestConst.CREATE.equals(item.getText())) {
             APIDoc doc = APIUtil.getAPIDoc();
             APIUtil.apiDoc(doc);
             return;
         }
 
-        if (RESTConst.OPEN.equals(item.getText())) {
-            TestUtil.open(RESTConst.APIDOC_HTML,
-                    RESTConst.MSG_APIDOC,
-                    RESTConst.API_DOCUMENT);
+        if (RestConst.OPEN.equals(item.getText())) {
+            TestUtil.open(RestConst.APIDOC_HTML,
+                RestConst.MSG_APIDOC,
+                RestConst.API_DOCUMENT);
         }
     }
 
     /*private void helpPerformed(JMenuItem item) {
-        if (RESTConst.HELP_CONTENTS.equals(item.getText())) {
+        if (RestConst.HELP_CONTENTS.equals(item.getText())) {
             try {
-                String path = RESTUtil.replacePath(RESTConst.HELP_DOC);
-                InputStream is = RESTUtil.getInputStream(RESTConst.HELP_DOC);
+                String path = RESTUtil.replacePath(RestConst.HELP_DOC);
+                InputStream is = RESTUtil.getInputStream(RestConst.HELP_DOC);
                 if (null == is) {
                     return;
                 }
@@ -272,7 +275,7 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
                 try {
                     Desktop.getDesktop().open(new File(path));
                 } catch (Exception e) {
-                    UIUtil.showMessage(RESTConst.MSG_HELP_FILE, RESTConst.HELP_CONTENTS);
+                    UIUtil.showMessage(RestConst.MSG_HELP_FILE, RestConst.HELP_CONTENTS);
                 }
             } catch (IOException e) {
                 log.error("Failed to open help document.", e);
@@ -280,11 +283,11 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
             return;
         }
 
-        if (RESTConst.REPORT_ISSUE.equals(item.getText())) {
+        if (RestConst.REPORT_ISSUE.equals(item.getText())) {
             try {
-                Desktop.getDesktop().browse(new URI(RESTConst.URL_ISSUE));
+                Desktop.getDesktop().browse(new URI(RestConst.URL_ISSUE));
             } catch (Exception e) {
-                UIUtil.showMessage(RESTConst.MSG_REPORT_ISSUE, RESTConst.REPORT_ISSUE);
+                UIUtil.showMessage(RestConst.MSG_REPORT_ISSUE, RestConst.REPORT_ISSUE);
                 ;
             }
         }
@@ -301,7 +304,7 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (!RESTConst.PROGRESS.equals(evt.getPropertyName())) {
+        if (!RestConst.PROGRESS.equals(evt.getPropertyName())) {
             return;
         }
 
@@ -324,6 +327,7 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
     }
 
     class HistTask extends SwingWorker<Void, Void> {
+
         private HttpHists hists = null;
 
         public HistTask(HttpHists hists) {
@@ -340,7 +344,7 @@ public class MenuBarView implements ActionListener, PropertyChangeListener {
                 progress = hists.progress();
                 done = Math.min(progress, hists.getTotal()) * 100 / hists.getTotal();
                 this.setProgress(done);
-                RESTUtil.sleep(RESTConst.TIME_100MS);
+                RESTUtil.sleep(RestConst.TIME_100MS);
             }
             return null;
         }

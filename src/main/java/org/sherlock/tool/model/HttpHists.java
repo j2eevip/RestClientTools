@@ -1,16 +1,16 @@
 package org.sherlock.tool.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.collections.CollectionUtils;
-import org.sherlock.tool.gui.RestView;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.collections.CollectionUtils;
+import org.sherlock.tool.gui.RestView;
 
 public class HttpHists implements Serializable {
+
     private static final long serialVersionUID = 8398645272434084076L;
 
     private List<HttpHist> hists;

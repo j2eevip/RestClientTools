@@ -1,10 +1,10 @@
 package org.sherlock.tool.model;
 
+import java.io.Serializable;
 import org.sherlock.tool.gui.util.APIUtil;
 
-import java.io.Serializable;
-
 public class APISum implements Serializable {
+
     private static final long serialVersionUID = 5656937659315612005L;
 
     /**

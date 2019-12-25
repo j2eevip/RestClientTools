@@ -13,7 +13,7 @@ function pieChart() {
     var maxPullOutDistance = 25; // How far, in pixels, to pull slices out when clicked
     var pullOutFrameStep = 4; // How many pixels to move a slice with each animation frame
     var pullOutFrameInterval = 40; // How long (in ms) between each animation frame
-    var pullOutLabelPadding = 65; // Padding between pulled-out slice and its label  
+    var pullOutLabelPadding = 65; // Padding between pulled-out slice and its label
     var pullOutLabelFont = 'bold 16px \'Trebuchet MS\', Verdana, sans-serif'; // Pull-out slice label font
     var pullOutValueFont = 'bold 12px \'Trebuchet MS\', Verdana, sans-serif'; // Pull-out slice value font
     var pullOutShadowColour = 'rgba( 0, 0, 0, .5 )'; // Colour to use for the pull-out slice shadow
@@ -65,7 +65,8 @@ function pieChart() {
             }
 
             $tasks.append('<tr>' + '<td>' + (i + 1) + '</td>'
-                + '<td>' + hist['request'].method + ' ' + hist['request'].url + '</td>'
+                + '<td>' + hist['request'].method + ' ' + hist['request'].url
+                + '</td>'
                 + '<td>' + hist['response'].status + '</td>'
                 + '<td>' + hist['response'].date + '</td>'
                 + '<td>' + hist['response'].time + ' ms' + '</td>'
@@ -86,14 +87,17 @@ function pieChart() {
         canvas = document.getElementById('chart');
 
         // Exit if the browser isn't canvas-capable
-        if (typeof canvas.getContext === 'undefined') return;
+        if (typeof canvas.getContext === 'undefined') {
+            return;
+        }
 
         // Initialise some properties of the canvas and chart
         canvasWidth = canvas.width;
         canvasHeight = canvas.height;
         centreX = canvasWidth / 2;
         centreY = canvasHeight / 2;
-        chartRadius = Math.min(canvasWidth, canvasHeight) / 2 * (chartSizePercent / 100);
+        chartRadius = Math.min(canvasWidth, canvasHeight) / 2
+            * (chartSizePercent / 100);
 
         // Grab the data from the table,
         // and assign click handlers to the table data cells
@@ -120,10 +124,13 @@ function pieChart() {
             // Extract and store the cell colour
             if (rgb = $(this).css('color').match(/rgb\((\d+), (\d+), (\d+)/)) {
                 chartColours[currentRow] = [rgb[1], rgb[2], rgb[3]];
-            } else if (hex = $(this).css('color').match(/#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/)) {
-                chartColours[currentRow] = [parseInt(hex[1], 16), parseInt(hex[2], 16), parseInt(hex[3], 16)];
+            } else if (hex = $(this).css('color').match(
+                /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/)) {
+                chartColours[currentRow] = [parseInt(hex[1], 16),
+                    parseInt(hex[2], 16), parseInt(hex[3], 16)];
             } else {
-                alert('Error: Colour could not be determined! Please specify table colours using the format \'#xxxxxx\'');
+                alert(
+                    'Error: Colour could not be determined! Please specify table colours using the format \'#xxxxxx\'');
                 return;
             }
 
@@ -133,7 +140,8 @@ function pieChart() {
         var currentPos = 0; // The current position of the slice in the pie (from 0 to 1)
         for (var slice in chartData) {
             chartData[slice]['startAngle'] = 2 * Math.PI * currentPos;
-            chartData[slice]['endAngle'] = 2 * Math.PI * (currentPos + (chartData[slice]['value'] / totalValue));
+            chartData[slice]['endAngle'] = 2 * Math.PI * (currentPos
+                + (chartData[slice]['value'] / totalValue));
             currentPos += chartData[slice]['value'] / totalValue;
         }
 
@@ -141,7 +149,6 @@ function pieChart() {
         drawChart();
         $('#chart').click(handleChartClick);
     }
-
 
     /**
      * Process mouse clicks in the chart area.
@@ -161,17 +168,23 @@ function pieChart() {
         // Was the click inside the pie chart?
         var xFromCentre = mouseX - centreX;
         var yFromCentre = mouseY - centreY;
-        var distanceFromCentre = Math.sqrt(Math.pow(Math.abs(xFromCentre), 2) + Math.pow(Math.abs(yFromCentre), 2));
+        var distanceFromCentre = Math.sqrt(
+            Math.pow(Math.abs(xFromCentre), 2) + Math.pow(Math.abs(yFromCentre),
+            2));
 
         if (distanceFromCentre <= chartRadius) {
 
             // Yes, the click was inside the chart.
             // Find the slice that was clicked by comparing angles relative to the chart centre.
-            var clickAngle = Math.atan2(yFromCentre, xFromCentre) - chartStartAngle;
-            if (clickAngle < 0) clickAngle = 2 * Math.PI + clickAngle;
+            var clickAngle = Math.atan2(yFromCentre, xFromCentre)
+                - chartStartAngle;
+            if (clickAngle < 0) {
+                clickAngle = 2 * Math.PI + clickAngle;
+            }
 
             for (var slice in chartData) {
-                if (clickAngle >= chartData[slice]['startAngle'] && clickAngle <= chartData[slice]['endAngle']) {
+                if (clickAngle >= chartData[slice]['startAngle'] && clickAngle
+                    <= chartData[slice]['endAngle']) {
 
                     // Slice found. Pull it out or push it in, as required.
                     toggleSlice(slice);
@@ -183,7 +196,6 @@ function pieChart() {
         // User must have clicked outside the pie. Push any pulled-out slice back in.
         pushIn();
     }
-
 
     /**
      * Process mouse clicks in the table area.
@@ -198,7 +210,6 @@ function pieChart() {
         var slice = $(this).data('slice');
         toggleSlice(slice);
     }
-
 
     /**
      * Push a slice in or out.
@@ -216,7 +227,6 @@ function pieChart() {
         }
     }
 
-
     /**
      * Start pulling a slice out from the pie.
      *
@@ -226,7 +236,9 @@ function pieChart() {
     function startPullOut(slice) {
 
         // Exit if we're already pulling out this slice
-        if (currentPullOutSlice == slice) return;
+        if (currentPullOutSlice == slice) {
+            return;
+        }
 
         // Record the slice that we're pulling out, clear any previous animation, then start the animation
         currentPullOutSlice = slice;
@@ -243,7 +255,6 @@ function pieChart() {
         labelCell.addClass('highlight');
         valueCell.addClass('highlight');
     }
-
 
     /**
      * Draw a frame of the pull-out animation.
@@ -266,7 +277,6 @@ function pieChart() {
         drawChart();
     }
 
-
     /**
      * Push any pulled-out slice back in.
      *
@@ -281,7 +291,6 @@ function pieChart() {
         drawChart();
         $('#chartData td').removeClass('highlight');
     }
-
 
     /**
      * Draw the chart.
@@ -299,14 +308,17 @@ function pieChart() {
 
         // Draw each slice of the chart, skipping the pull-out slice (if any)
         for (var slice in chartData) {
-            if (slice != currentPullOutSlice) drawSlice(context, slice);
+            if (slice != currentPullOutSlice) {
+                drawSlice(context, slice);
+            }
         }
 
         // If there's a pull-out slice in effect, draw it.
         // (We draw the pull-out slice last so its drop shadow doesn't get painted over.)
-        if (currentPullOutSlice != -1) drawSlice(context, currentPullOutSlice);
+        if (currentPullOutSlice != -1) {
+            drawSlice(context, currentPullOutSlice);
+        }
     }
-
 
     /**
      * Draw an individual slice in the chart.
@@ -327,15 +339,25 @@ function pieChart() {
             // Offset it from the pie centre, draw the text label,
             // and add a drop shadow.
             var midAngle = (startAngle + endAngle) / 2;
-            var actualPullOutDistance = currentPullOutDistance * easeOut(currentPullOutDistance / maxPullOutDistance, .8);
+            var actualPullOutDistance = currentPullOutDistance * easeOut(
+                currentPullOutDistance / maxPullOutDistance, .8);
             startX = centreX + Math.cos(midAngle) * actualPullOutDistance;
             startY = centreY + Math.sin(midAngle) * actualPullOutDistance;
             context.fillStyle = 'rgb(' + chartColours[slice].join(',') + ')';
             context.textAlign = 'center';
             context.font = pullOutLabelFont;
-            context.fillText(chartData[slice]['label'], centreX + Math.cos(midAngle) * (chartRadius + maxPullOutDistance + pullOutLabelPadding), centreY + Math.sin(midAngle) * (chartRadius + maxPullOutDistance + pullOutLabelPadding));
+            context.fillText(chartData[slice]['label'],
+                centreX + Math.cos(midAngle) * (chartRadius + maxPullOutDistance
+                + pullOutLabelPadding),
+                centreY + Math.sin(midAngle) * (chartRadius + maxPullOutDistance
+                + pullOutLabelPadding));
             context.font = pullOutValueFont;
-            context.fillText(chartData[slice]['value'] + ' (' + (parseInt(chartData[slice]['value'] / totalValue * 100 + .5)) + '%)', centreX + Math.cos(midAngle) * (chartRadius + maxPullOutDistance + pullOutLabelPadding), centreY + Math.sin(midAngle) * (chartRadius + maxPullOutDistance + pullOutLabelPadding) + 20);
+            context.fillText(chartData[slice]['value'] + ' (' + (parseInt(
+                chartData[slice]['value'] / totalValue * 100 + .5)) + '%)',
+                centreX + Math.cos(midAngle) * (chartRadius + maxPullOutDistance
+                + pullOutLabelPadding),
+                centreY + Math.sin(midAngle) * (chartRadius + maxPullOutDistance
+                + pullOutLabelPadding) + 20);
             context.shadowOffsetX = pullOutShadowOffsetX;
             context.shadowOffsetY = pullOutShadowOffsetY;
             context.shadowBlur = pullOutShadowBlur;
@@ -348,9 +370,11 @@ function pieChart() {
         }
 
         // Set up the gradient fill for the slice
-        var sliceGradient = context.createLinearGradient(0, 0, canvasWidth * .75, canvasHeight * .75);
+        var sliceGradient = context.createLinearGradient(0, 0,
+            canvasWidth * .75, canvasHeight * .75);
         sliceGradient.addColorStop(0, sliceGradientColour);
-        sliceGradient.addColorStop(1, 'rgb(' + chartColours[slice].join(',') + ')');
+        sliceGradient.addColorStop(1,
+            'rgb(' + chartColours[slice].join(',') + ')');
 
         // Draw the slice
         context.beginPath();
@@ -359,7 +383,8 @@ function pieChart() {
         context.lineTo(startX, startY);
         context.closePath();
         context.fillStyle = sliceGradient;
-        context.shadowColor = (slice == currentPullOutSlice) ? pullOutShadowColour : 'rgba( 0, 0, 0, 0 )';
+        context.shadowColor = (slice == currentPullOutSlice)
+            ? pullOutShadowColour : 'rgba( 0, 0, 0, 0 )';
         context.fill();
         context.shadowColor = 'rgba( 0, 0, 0, 0 )';
 
@@ -375,7 +400,6 @@ function pieChart() {
         // Draw the slice border
         context.stroke();
     }
-
 
     /**
      * Easing function.

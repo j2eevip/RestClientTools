@@ -26,7 +26,7 @@ public enum Charsets {
         Charsets[] values = Charsets.values();
         Vector<String> names = new Vector<String>(values.length);
         for (Charsets value : values) {
-             names.add(value.getCname());
+            names.add(value.getCname());
         }
         return names;
     }

@@ -1,5 +1,9 @@
 package org.sherlock.tool.util;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.InputStream;
+import java.util.List;
 import org.apache.commons.codec.Charsets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.FileUtils;
@@ -7,18 +11,17 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.gui.util.UIUtil;
-import org.sherlock.tool.model.*;
-import org.sherlock.tool.thread.RESTThdPool;
+import org.sherlock.tool.model.ErrCode;
+import org.sherlock.tool.model.HttpHist;
+import org.sherlock.tool.model.HttpHists;
+import org.sherlock.tool.model.HttpReq;
+import org.sherlock.tool.model.HttpRsp;
 import org.sherlock.tool.thread.TestThd;
 
-import java.awt.*;
-import java.io.File;
-import java.io.InputStream;
-import java.util.List;
-
 public final class TestUtil {
+
     private static Logger log = LogManager.getLogger(TestUtil.class);
 
     public static void runTest(HttpHists hists) {
@@ -50,42 +53,42 @@ public final class TestUtil {
     private static synchronized void report(HttpHists hists) {
         try {
             // Update JS
-            InputStream is = RESTUtil.getInputStream(RESTConst.REPORT_JS);
+            InputStream is = RESTUtil.getInputStream(RestConst.REPORT_JS);
             String jsTxt = IOUtils.toString(is, Charsets.UTF_8);
-            jsTxt = jsTxt.replaceFirst(RESTConst.LABEL_REPORT_DATA, RESTUtil.tojsonText(hists));
-            FileUtils.write(new File(RESTUtil.replacePath(RESTConst.REPORT_JS)), jsTxt, Charsets.UTF_8);
+            jsTxt = jsTxt.replaceFirst(RestConst.LABEL_REPORT_DATA, RESTUtil.tojsonText(hists));
+            FileUtils.write(new File(RESTUtil.replacePath(RestConst.REPORT_JS)), jsTxt, Charsets.UTF_8);
             RESTUtil.close(is);
 
             // Update HTML
-            is = RESTUtil.getInputStream(RESTConst.REPORT_HTML);
+            is = RESTUtil.getInputStream(RestConst.REPORT_HTML);
             String htmlTxt = IOUtils.toString(is, Charsets.UTF_8);
-            htmlTxt = htmlTxt.replaceFirst(RESTConst.LABEL_TOTAL, String.valueOf(hists.getTotal()));
-            htmlTxt = htmlTxt.replaceFirst(RESTConst.LABEL_PASSES, String.valueOf(hists.getPasses()));
-            htmlTxt = htmlTxt.replaceFirst(RESTConst.LABEL_FAILURES, String.valueOf(hists.getFailures()));
-            htmlTxt = htmlTxt.replaceFirst(RESTConst.LABEL_ERRORS, String.valueOf(hists.getErrors()));
-            FileUtils.write(new File(RESTUtil.replacePath(RESTConst.REPORT_HTML)), htmlTxt, Charsets.UTF_8);
+            htmlTxt = htmlTxt.replaceFirst(RestConst.LABEL_TOTAL, String.valueOf(hists.getTotal()));
+            htmlTxt = htmlTxt.replaceFirst(RestConst.LABEL_PASSES, String.valueOf(hists.getPasses()));
+            htmlTxt = htmlTxt.replaceFirst(RestConst.LABEL_FAILURES, String.valueOf(hists.getFailures()));
+            htmlTxt = htmlTxt.replaceFirst(RestConst.LABEL_ERRORS, String.valueOf(hists.getErrors()));
+            FileUtils.write(new File(RESTUtil.replacePath(RestConst.REPORT_HTML)), htmlTxt, Charsets.UTF_8);
             RESTUtil.close(is);
 
             // Copy file
-            is = RESTUtil.getInputStream(RESTConst.REPORT_JQUERY);
-            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RESTConst.REPORT_JQUERY)));
+            is = RESTUtil.getInputStream(RestConst.REPORT_JQUERY);
+            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RestConst.REPORT_JQUERY)));
             RESTUtil.close(is);
 
-            is = RESTUtil.getInputStream(RESTConst.REPORT_CSS);
-            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RESTConst.REPORT_CSS)));
+            is = RESTUtil.getInputStream(RestConst.REPORT_CSS);
+            FileUtils.copyInputStreamToFile(is, new File(RESTUtil.replacePath(RestConst.REPORT_CSS)));
             RESTUtil.close(is);
 
-            is = RESTUtil.getInputStream(RESTConst.LOGO);
-            String rpath = RESTUtil.getPath(RESTConst.REPORT);
-            String logoPath = StringUtils.replaceOnce(RESTConst.LOGO, RESTConst.SHERLOCK_TOOL, rpath);
+            is = RESTUtil.getInputStream(RestConst.LOGO);
+            String rpath = RESTUtil.getPath(RestConst.REPORT);
+            String logoPath = StringUtils.replaceOnce(RestConst.LOGO, RestConst.SHERLOCK_TOOL, rpath);
             FileUtils.copyInputStreamToFile(is, new File(logoPath));
             RESTUtil.close(is);
 
             try {
                 // Open test report
-                Desktop.getDesktop().open(new File(RESTUtil.replacePath(RESTConst.REPORT_HTML)));
+                Desktop.getDesktop().open(new File(RESTUtil.replacePath(RestConst.REPORT_HTML)));
             } catch (Exception e) {
-                UIUtil.showMessage(RESTConst.MSG_REPORT, RESTConst.TEST_REPORT);
+                UIUtil.showMessage(RestConst.MSG_REPORT, RestConst.TEST_REPORT);
             }
 
         } catch (Throwable e) {
@@ -112,7 +115,7 @@ public final class TestUtil {
         int preDone = 0;
         int progress = 0;
 
-        System.out.print(RESTConst.TEST_CASE + ".\r\nCompleted --> ");
+        System.out.print(RestConst.TEST_CASE + ".\r\nCompleted --> ");
         while (progress < hists.getTotal()) {
             progress = hists.progress();
             done = Math.min(progress, hists.getTotal()) * 100 / hists.getTotal();
@@ -123,16 +126,16 @@ public final class TestUtil {
                 }
             }
             preDone = done;
-            RESTUtil.sleep(RESTConst.TIME_100MS);
+            RESTUtil.sleep(RestConst.TIME_100MS);
         }
-        System.out.println("\r\n" + RESTConst.DONE);
+        System.out.println("\r\n" + RestConst.DONE);
     }
 
     public static void apiTest(HttpHists hists) {
         Thread testThrd = new TestThd(hists);
-        testThrd.setName(RESTConst.TEST_THREAD);
-        RESTThdPool.getInstance().getPool().submit(testThrd);
-        RESTUtil.sleep(RESTConst.TIME_100MS);
+        testThrd.setName(RestConst.TEST_THREAD);
+        testThrd.start();
+        RESTUtil.sleep(RestConst.TIME_100MS);
         TestUtil.progress(hists);
     }
 }

@@ -3,6 +3,7 @@ package org.sherlock.tool.model;
 import java.io.Serializable;
 
 public class APIDesc implements Serializable {
+
     private static final long serialVersionUID = 2313207712392411547L;
 
     /**

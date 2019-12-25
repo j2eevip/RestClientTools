@@ -1,18 +1,23 @@
 package org.sherlock.tool.gui.rsp;
 
-import org.apache.commons.lang.StringUtils;
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.util.RESTUtil;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import org.apache.commons.lang.StringUtils;
+import org.sherlock.tool.constant.RestConst;
+import org.sherlock.tool.util.RESTUtil;
 
 public class RspTextPanel extends JPanel implements ActionListener {
+
     private static final long serialVersionUID = 5120996065049850894L;
 
     private JTextArea txtAra = null;
@@ -32,7 +37,7 @@ public class RspTextPanel extends JPanel implements ActionListener {
             }
 
             txtAra.requestFocus();
-            if (RESTConst.RAW.equals(txtAra.getName())) {
+            if (RestConst.RAW.equals(txtAra.getName())) {
                 miFmt.setEnabled(false);
             } else {
                 miFmt.setEnabled(true);
@@ -64,19 +69,19 @@ public class RspTextPanel extends JPanel implements ActionListener {
     }
 
     private void init(String name) {
-        this.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        this.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
 
-        txtAra = new JTextArea(RESTConst.AREA_ROWS, 1);
+        txtAra = new JTextArea(RestConst.AREA_ROWS, 1);
         txtAra.setName(name);
         txtAra.setEditable(false);
         txtAra.addMouseListener(ma);
 
-        miFmt = new JMenuItem(RESTConst.FORMAT);
-        miFmt.setName(RESTConst.FORMAT);
+        miFmt = new JMenuItem(RestConst.FORMAT);
+        miFmt.setName(RestConst.FORMAT);
         miFmt.addActionListener(this);
 
-        miCpy = new JMenuItem(RESTConst.COPY);
-        miCpy.setName(RESTConst.COPY);
+        miCpy = new JMenuItem(RestConst.COPY);
+        miCpy.setName(RestConst.COPY);
         miCpy.addActionListener(this);
 
         pm = new JPopupMenu();
@@ -103,13 +108,13 @@ public class RspTextPanel extends JPanel implements ActionListener {
         }
 
         JMenuItem item = (JMenuItem) (src);
-        if (RESTConst.FORMAT.equals(item.getName())) {
+        if (RestConst.FORMAT.equals(item.getName())) {
             String body = RESTUtil.format(txtAra.getText());
             txtAra.setText(body);
             return;
         }
 
-        if (RESTConst.COPY.equals(item.getName())) {
+        if (RestConst.COPY.equals(item.getName())) {
             StringSelection ss = null;
             String seltxt = txtAra.getSelectedText();
             if (StringUtils.isNotBlank(seltxt)) {
@@ -119,8 +124,8 @@ public class RspTextPanel extends JPanel implements ActionListener {
             }
 
             Toolkit.getDefaultToolkit()
-                    .getSystemClipboard()
-                    .setContents(ss, null);
+                .getSystemClipboard()
+                .setContents(ss, null);
 
         }
     }

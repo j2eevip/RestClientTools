@@ -1,13 +1,14 @@
 package org.sherlock.tool.thread;
 
-import org.sherlock.tool.RESTMain;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.RestMain;
+import org.sherlock.tool.constant.RestConst;
 
 /**
  * @author Sherlock
  */
 public class LoadThd implements Runnable {
-    private String path = RESTConst.EMPTY;
+
+    private String path = RestConst.EMPTY;
 
     public LoadThd(String path) {
         this.path = path;
@@ -15,8 +16,8 @@ public class LoadThd implements Runnable {
 
     @Override
     public void run() {
-        RESTMain.load(path);
-        RESTMain.init();
+        RestMain.load(path);
+        RestMain.init();
     }
 
 }

@@ -27,7 +27,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.gui.common.RestTrustManager;
 import org.sherlock.tool.model.Charsets;
 import org.sherlock.tool.model.HttpMethod;
@@ -35,6 +35,7 @@ import org.sherlock.tool.model.HttpReq;
 import org.sherlock.tool.model.HttpRsp;
 
 public final class RESTClient {
+
     private static Logger log = LogManager.getLogger(RESTClient.class);
     // Instance
     private static RESTClient instance = null;
@@ -48,7 +49,7 @@ public final class RESTClient {
     private RESTClient() {
         SSLContext sc = null;
         try {
-            sc = SSLContext.getInstance(RESTConst.TLS);
+            sc = SSLContext.getInstance(RestConst.TLS);
             TrustManager[] trustAllCrts = new TrustManager[]{new RestTrustManager()};
             sc.init(null, trustAllCrts, null);
         } catch (Exception e) {
@@ -58,14 +59,13 @@ public final class RESTClient {
         HostnameVerifier hv = (arg0, arg1) -> true;
 
         rc = RequestConfig.custom()
-                .setConnectTimeout(RESTConst.TIME_OUT)
-                .setConnectionRequestTimeout(RESTConst.TIME_OUT)
-                .setSocketTimeout(RESTConst.TIME_OUT).build();
+            .setConnectTimeout(RestConst.TIME_OUT)
+            .setConnectionRequestTimeout(RestConst.TIME_OUT)
+            .setSocketTimeout(RestConst.TIME_OUT).build();
 
         this.cb = HttpClients.custom();
         this.cb.setSSLContext(sc);
         this.cb.setSSLHostnameVerifier(hv);
-
         hc = this.cb.build();
     }
 
@@ -169,13 +169,13 @@ public final class RESTClient {
                 Set<Entry<String, String>> es = cks.entrySet();
                 for (Entry<String, String> e : es) {
                     sb.append("; ")
-                            .append(e.getKey())
-                            .append("=")
-                            .append(e.getValue());
+                        .append(e.getKey())
+                        .append("=")
+                        .append(e.getValue());
                 }
                 String hdrVal = sb.toString().replaceFirst("; ", "");
-                hrb.setHeader(RESTConst.COOKIE, hdrVal);
-                req.getHeaders().put(RESTConst.COOKIE, hdrVal);
+                hrb.setHeader(RestConst.COOKIE, hdrVal);
+                req.getHeaders().put(RestConst.COOKIE, hdrVal);
             }
 
             /* Execute HTTP request */
@@ -183,7 +183,9 @@ public final class RESTClient {
             rsp = this.exec(hrb);
             rsp.setRawTxt(req.toRawTxt() + rsp.toRawTxt());
         } catch (Throwable e) {
-            rsp.setRawTxt("Failed to process this HTTP request: \r\n" + req + "\r\nResponse messages from server: \r\n" + e.getMessage());
+            rsp.setRawTxt(
+                "Failed to process this HTTP request: \r\n" + req + "\r\nResponse messages from server: \r\n" + e
+                    .getMessage());
             log.error("Failed to process this HTTP request: \r\n" + req, e);
         }
 

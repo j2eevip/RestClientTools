@@ -2,18 +2,18 @@ package org.sherlock.tool.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.util.RESTUtil;
-
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
+import org.sherlock.tool.constant.RestConst;
+import org.sherlock.tool.util.RESTUtil;
 
 public class HttpRsp implements Serializable {
+
     /**
      * @Fields serialVersionUID
      */
@@ -201,29 +201,29 @@ public class HttpRsp implements Serializable {
     public String toRawTxt() {
         // Status
         StringBuilder sb = new StringBuilder();
-        sb.append(RESTConst.RSP_TAG)
-                .append(RESTUtil.lines(2))
-                .append(this.status)
-                .append(RESTUtil.lines(2));
+        sb.append(RestConst.RSP_TAG)
+            .append(RESTUtil.lines(2))
+            .append(this.status)
+            .append(RESTUtil.lines(2));
 
         // Headers
         if (MapUtils.isNotEmpty(this.headers)) {
-            sb.append(RESTConst.HDR_TAG).append(RESTUtil.lines(1));
+            sb.append(RestConst.HDR_TAG).append(RESTUtil.lines(1));
             Map<String, String> hdr = this.headers;
             Set<Entry<String, String>> es = hdr.entrySet();
             for (Entry<String, String> e : es) {
                 sb.append(e.toString().replaceFirst("=", " : "))
-                        .append(RESTUtil.lines(1));
+                    .append(RESTUtil.lines(1));
             }
         }
 
         // Body
         if (StringUtils.isNotBlank(this.body)) {
             sb.append(RESTUtil.lines(1))
-                    .append(RESTConst.BDY_TAG)
-                    .append(RESTUtil.lines(1))
-                    .append(this.body)
-                    .append(RESTUtil.lines(1));
+                .append(RestConst.BDY_TAG)
+                .append(RESTUtil.lines(1))
+                .append(this.body)
+                .append(RESTUtil.lines(1));
         }
 
         return sb.toString();

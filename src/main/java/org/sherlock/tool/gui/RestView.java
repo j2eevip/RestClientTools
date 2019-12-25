@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.gui.hist.HistView;
 import org.sherlock.tool.gui.req.ReqView;
 import org.sherlock.tool.gui.rsp.RspView;
@@ -14,9 +14,11 @@ import org.sherlock.tool.gui.util.UIUtil;
  * @author Sherlock
  */
 public class RestView extends JPanel {
+
     private static final long serialVersionUID = 957993921065702646L;
+
     private RestView() {
-        this.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH));
+        this.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, RestConst.BORDER_WIDTH));
         vReq = new ReqView();
         vRsp = new RspView();
         vHist = new HistView();
@@ -34,21 +36,26 @@ public class RestView extends JPanel {
     }
 
     private static RestView view = null;
+
     public static RestView getView() {
         if (null == view) {
             view = new RestView();
         }
         return view;
     }
+
     private ReqView vReq;
     private RspView vRsp;
     private HistView vHist;
+
     public ReqView getReqView() {
         return vReq;
     }
+
     public RspView getRspView() {
         return vRsp;
     }
+
     public HistView getHistView() {
         return vHist;
     }

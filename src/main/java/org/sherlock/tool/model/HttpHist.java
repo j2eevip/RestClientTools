@@ -1,12 +1,12 @@
 package org.sherlock.tool.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class HttpHist implements Serializable {
+
     private static final long serialVersionUID = 8720504484781387383L;
 
     /**
@@ -14,6 +14,10 @@ public class HttpHist implements Serializable {
      */
     private String key;
 
+    /**
+     * show name
+     */
+    private String name;
     /**
      * HTTP Request
      */
@@ -95,6 +99,14 @@ public class HttpHist implements Serializable {
         this.key = key;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public HttpReq getReq() {
         return req;
     }
@@ -154,7 +166,7 @@ public class HttpHist implements Serializable {
     public List<Object> toRow(Object histId) {
         List<Object> data = new ArrayList<Object>();
         data.add(histId);
-        data.add(this.req.getMethod() + " " + req.getUrl());
+        data.add(this.name);
         data.add(this.rsp.getStatus());
         data.add(this.rsp.getDate());
         data.add(this.rsp.getTime() + "ms");

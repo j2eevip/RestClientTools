@@ -1,13 +1,8 @@
 package org.sherlock.tool.gui.req;
 
-import org.apache.commons.lang.StringUtils;
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.RestView;
-import org.sherlock.tool.gui.common.TabModel;
-import org.sherlock.tool.gui.util.UIUtil;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,8 +10,25 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import org.apache.commons.lang.StringUtils;
+import org.sherlock.tool.constant.RestConst;
+import org.sherlock.tool.gui.RestView;
+import org.sherlock.tool.gui.common.TabModel;
+import org.sherlock.tool.gui.util.UIUtil;
 
 public class ReqTabPanel extends JPanel implements ActionListener {
+
     private static final long serialVersionUID = -1299418241312495718L;
 
     private TabModel tabMdl = null;
@@ -88,11 +100,11 @@ public class ReqTabPanel extends JPanel implements ActionListener {
     }
 
     private void init(String name) {
-        this.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        this.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
 
         List<String> colNames = new ArrayList<String>();
         colNames.add(name);
-        colNames.add(RESTConst.VALUE);
+        colNames.add(RestConst.VALUE);
 
         tabMdl = new TabModel(colNames);
         tab = new JTable(tabMdl);
@@ -102,35 +114,35 @@ public class ReqTabPanel extends JPanel implements ActionListener {
         tab.addMouseListener(ma);
         tab.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
-        miRmSel = new JMenuItem(RESTConst.RM_SEL);
-        miRmSel.setName(RESTConst.RM_SEL);
+        miRmSel = new JMenuItem(RestConst.RM_SEL);
+        miRmSel.setName(RestConst.RM_SEL);
         miRmSel.addActionListener(this);
 
-        miRmAll = new JMenuItem(RESTConst.RM_ALL);
-        miRmAll.setName(RESTConst.RM_ALL);
+        miRmAll = new JMenuItem(RestConst.RM_ALL);
+        miRmAll.setName(RestConst.RM_ALL);
         miRmAll.addActionListener(this);
 
         pm = new JPopupMenu();
         pm.add(miRmSel);
         pm.add(miRmAll);
 
-        txtFldKey = new JTextField(RESTConst.FIELD_SIZE);
-        txtFldVal = new JTextField(RESTConst.FIELD_SIZE);
+        txtFldKey = new JTextField(RestConst.FIELD_SIZE);
+        txtFldVal = new JTextField(RestConst.FIELD_SIZE);
 
-        lblKey = new JLabel(RESTConst.KEY + ":");
-        lblVal = new JLabel(RESTConst.VALUE + ":");
+        lblKey = new JLabel(RestConst.KEY + ":");
+        lblVal = new JLabel(RestConst.VALUE + ":");
 
-        iconAdd = UIUtil.getIcon(RESTConst.ICON_ADD);
-        iconDel = UIUtil.getIcon(RESTConst.ICON_DEL);
+        iconAdd = UIUtil.getIcon(RestConst.ICON_ADD);
+        iconDel = UIUtil.getIcon(RestConst.ICON_DEL);
 
         btnAdd = new JButton(iconAdd);
-        btnAdd.setName(RESTConst.ADD);
-        btnAdd.setToolTipText(RESTConst.ADD + " " + name);
+        btnAdd.setName(RestConst.ADD);
+        btnAdd.setToolTipText(RestConst.ADD + " " + name);
         btnAdd.addActionListener(this);
 
         btnDel = new JButton(iconDel);
-        btnDel.setName(RESTConst.DELETE);
-        btnDel.setToolTipText(RESTConst.DELETE + " " + name);
+        btnDel.setName(RestConst.DELETE);
+        btnDel.setToolTipText(RestConst.DELETE + " " + name);
         btnDel.addActionListener(this);
 
         JPanel pnlNorth = new JPanel();
@@ -157,7 +169,7 @@ public class ReqTabPanel extends JPanel implements ActionListener {
             return;
         }
         JButton btn = (JButton) src;
-        if (RESTConst.ADD.equals(btn.getName())) {
+        if (RestConst.ADD.equals(btn.getName())) {
             String key = txtFldKey.getText();
             String value = txtFldVal.getText();
             if (StringUtils.isBlank(key)) {
@@ -171,7 +183,7 @@ public class ReqTabPanel extends JPanel implements ActionListener {
             return;
         }
 
-        if (RESTConst.DELETE.equals(btn.getName())) {
+        if (RestConst.DELETE.equals(btn.getName())) {
             int rc = tab.getSelectedRowCount();
             if (rc < 1) {
                 return;
@@ -187,7 +199,7 @@ public class ReqTabPanel extends JPanel implements ActionListener {
             return;
         }
         JMenuItem item = (JMenuItem) (src);
-        if (RESTConst.RM_SEL.equals(item.getName())) {
+        if (RestConst.RM_SEL.equals(item.getName())) {
             int rc = tab.getSelectedRowCount();
             if (rc < 1) {
                 return;
@@ -198,12 +210,12 @@ public class ReqTabPanel extends JPanel implements ActionListener {
             return;
         }
 
-        if (RESTConst.RM_ALL.equals(item.getName())) {
+        if (RestConst.RM_ALL.equals(item.getName())) {
             JOptionPane.setDefaultLocale(Locale.US);
             int ret = JOptionPane.showConfirmDialog(RestView.getView(),
-                    RESTConst.CONFIRM_RM_ALL,
-                    RESTConst.RM_ALL,
-                    JOptionPane.YES_NO_OPTION);
+                RestConst.CONFIRM_RM_ALL,
+                RestConst.RM_ALL,
+                JOptionPane.YES_NO_OPTION);
             if (0 == ret) {
                 tabMdl.clear();
             }

@@ -2,21 +2,8 @@ package org.sherlock.tool.gui.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.util.UIUtil;
-import org.sherlock.tool.model.HttpHist;
-import org.sherlock.tool.util.RESTUtil;
-
-import javax.swing.*;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-import java.awt.*;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -26,8 +13,26 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.sherlock.tool.constant.RestConst;
+import org.sherlock.tool.gui.util.UIUtil;
+import org.sherlock.tool.model.HttpHist;
+import org.sherlock.tool.util.RESTUtil;
 
 public class JSONTree extends JPanel implements ActionListener {
+
     private static final long serialVersionUID = 7605731488849547300L;
     private static Logger log = LogManager.getLogger(JSONTree.class);
     protected CheckBoxTreeNode rootNode;
@@ -77,13 +82,13 @@ public class JSONTree extends JPanel implements ActionListener {
     public JSONTree() {
         super(new GridLayout(1, 0));
 
-        rootNode = new CheckBoxTreeNode(RESTConst.JSON);
+        rootNode = new CheckBoxTreeNode(RestConst.JSON);
         treeModel = new DefaultTreeModel(rootNode);
 
         tree = new JTree(treeModel);
         tree.setCellRenderer(new CheckBoxTreeCellRenderer());
         tree.setEditable(false);
-        tree.setToolTipText(RESTConst.EXCLUDE_NODE);
+        tree.setToolTipText(RestConst.EXCLUDE_NODE);
         tree.setShowsRootHandles(true);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.addMouseListener(ma);
@@ -96,12 +101,12 @@ public class JSONTree extends JPanel implements ActionListener {
     public void initPopupMenu() {
         pm = new JPopupMenu();
 
-        miExpand = new JMenuItem(RESTConst.EXPAND_ALL);
-        miExpand.setName(RESTConst.EXPAND_ALL);
+        miExpand = new JMenuItem(RestConst.EXPAND_ALL);
+        miExpand.setName(RestConst.EXPAND_ALL);
         miExpand.addActionListener(this);
 
-        miCollapse = new JMenuItem(RESTConst.COLLAPSE_ALL);
-        miCollapse.setName(RESTConst.COLLAPSE_ALL);
+        miCollapse = new JMenuItem(RestConst.COLLAPSE_ALL);
+        miCollapse.setName(RestConst.COLLAPSE_ALL);
         miCollapse.addActionListener(this);
 
         pm.add(miExpand);
@@ -238,7 +243,7 @@ public class JSONTree extends JPanel implements ActionListener {
 
     private void selectedNodes(CheckBoxTreeNode node, List<String> selectedNodes) {
         if (node.isSelected()) {
-            String nodeKey = RESTConst.EMPTY;
+            String nodeKey = RestConst.EMPTY;
             Object[] names = node.getUserObjectPath();
             for (int i = 1; i < names.length; i++) {
                 nodeKey += "|" + names[i];
@@ -267,12 +272,12 @@ public class JSONTree extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         JMenuItem item = (JMenuItem) (e.getSource());
-        if (RESTConst.EXPAND_ALL.equals(item.getName())) {
+        if (RestConst.EXPAND_ALL.equals(item.getName())) {
             UIUtil.expand(this.tree);
             return;
         }
 
-        if (RESTConst.COLLAPSE_ALL.equals(item.getName())) {
+        if (RestConst.COLLAPSE_ALL.equals(item.getName())) {
             UIUtil.collapse(this.tree);
             return;
         }

@@ -1,11 +1,11 @@
 package org.sherlock.tool.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.io.Serializable;
 import java.util.Map;
 
 public class Causes implements Serializable {
+
     private static final long serialVersionUID = 5746546932645175308L;
 
     @JsonProperty("messages")

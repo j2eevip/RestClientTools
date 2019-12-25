@@ -1,16 +1,23 @@
 package org.sherlock.tool.gui.common;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
+import javax.swing.table.AbstractTableModel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-
-import javax.swing.table.AbstractTableModel;
-import java.util.*;
-import java.util.Map.Entry;
 
 /**
  * @author Sherlock
  */
 public class TabModel extends AbstractTableModel {
+
     private static final long serialVersionUID = 69634209639612612L;
 
     private boolean editable = true;

@@ -1,23 +1,35 @@
 package org.sherlock.tool.gui.req;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.entity.ContentType;
-import org.sherlock.tool.constant.RESTConst;
-import org.sherlock.tool.gui.util.UIUtil;
-import org.sherlock.tool.model.BodyType;
-import org.sherlock.tool.model.Charsets;
-import org.sherlock.tool.util.RESTUtil;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Vector;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import org.apache.commons.lang.StringUtils;
+import org.apache.http.entity.ContentType;
+import org.sherlock.tool.constant.RestConst;
+import org.sherlock.tool.gui.util.UIUtil;
+import org.sherlock.tool.model.BodyType;
+import org.sherlock.tool.model.Charsets;
+import org.sherlock.tool.util.RESTUtil;
 
 public class ReqBodyPanel extends JPanel implements ActionListener {
+
     private static final long serialVersionUID = 5120996065049850894L;
 
     private JLabel lblBodyType = null;
@@ -115,7 +127,7 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
     }
 
     private void init() {
-        this.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        this.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
 
         Vector<String> vtContType = new Vector<String>();
         vtContType.add(ContentType.APPLICATION_JSON.getMimeType());
@@ -136,49 +148,49 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
 
         cbContentType = new JComboBox<String>(vtContType);
         cbContentType.setEditable(true);
-        cbContentType.setToolTipText(RESTConst.CONTENT_TYPE.replace("-", " "));
+        cbContentType.setToolTipText(RestConst.CONTENT_TYPE.replace("-", " "));
 
         cbCharset = new JComboBox<String>(Charsets.getNames());
         cbCharset.setEditable(true);
-        cbCharset.setToolTipText(RESTConst.CHARSET);
+        cbCharset.setToolTipText(RestConst.CHARSET);
 
         cbBodyType = new JComboBox<String>(vtBdyType);
-        cbBodyType.setToolTipText(RESTConst.BODY_TYPE.replace("-", " "));
+        cbBodyType.setToolTipText(RestConst.BODY_TYPE.replace("-", " "));
         cbBodyType.setEnabled(false);
         cbBodyType.addActionListener(this);
 
-        btnLoadFile = new JButton(RESTConst.BROWSE);
-        btnLoadFile.setName(RESTConst.BROWSE);
-        btnLoadFile.setToolTipText(RESTConst.SELECT_FILE);
+        btnLoadFile = new JButton(RestConst.BROWSE);
+        btnLoadFile.setName(RestConst.BROWSE);
+        btnLoadFile.setToolTipText(RestConst.SELECT_FILE);
         btnLoadFile.addActionListener(this);
 
-        txtFldPath = new JTextField(RESTConst.FIELD_PATH_SIZE);
-        txtFldPath.setToolTipText(RESTConst.FILE_PATH);
+        txtFldPath = new JTextField(RestConst.FIELD_PATH_SIZE);
+        txtFldPath.setToolTipText(RestConst.FILE_PATH);
 
-        txtAraBody = new JTextArea(RESTConst.AREA_ROWS, 1);
-        txtAraBody.setToolTipText(RESTConst.BODY_CONTENT);
+        txtAraBody = new JTextArea(RestConst.AREA_ROWS, 1);
+        txtAraBody.setToolTipText(RestConst.BODY_CONTENT);
         txtAraBody.setEnabled(false);
         txtAraBody.setBackground(UIUtil.lightGray());
         txtAraBody.addMouseListener(ma);
 
-        lblBodyType = new JLabel(RESTConst.BODY_TYPE + ":");
-        lblContentType = new JLabel(RESTConst.CONTENT_TYPE + ":");
-        lblCharset = new JLabel(RESTConst.CHARSET + ":");
+        lblBodyType = new JLabel(RestConst.BODY_TYPE + ":");
+        lblContentType = new JLabel(RestConst.CONTENT_TYPE + ":");
+        lblCharset = new JLabel(RestConst.CHARSET + ":");
 
-        miFmt = new JMenuItem(RESTConst.FORMAT);
-        miFmt.setName(RESTConst.FORMAT);
+        miFmt = new JMenuItem(RestConst.FORMAT);
+        miFmt.setName(RestConst.FORMAT);
         miFmt.addActionListener(this);
 
-        miCpy = new JMenuItem(RESTConst.COPY);
-        miCpy.setName(RESTConst.COPY);
+        miCpy = new JMenuItem(RestConst.COPY);
+        miCpy.setName(RestConst.COPY);
         miCpy.addActionListener(this);
 
-        miClr = new JMenuItem(RESTConst.CLEAR);
-        miClr.setName(RESTConst.CLEAR);
+        miClr = new JMenuItem(RestConst.CLEAR);
+        miClr.setName(RestConst.CLEAR);
         miClr.addActionListener(this);
 
-        miPst = new JMenuItem(RESTConst.PASTE);
-        miPst.setName(RESTConst.PASTE);
+        miPst = new JMenuItem(RestConst.PASTE);
+        miPst.setName(RestConst.PASTE);
         miPst.addActionListener(this);
 
         pm = new JPopupMenu();
@@ -206,7 +218,7 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
         pnlChrstType.add(cbCharset);
 
         pnlNorth = new JPanel();
-        pnlNorth.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlNorth.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
         pnlNorth.add(pnlbdyType, BorderLayout.WEST);
         pnlNorth.add(pnlCntType, BorderLayout.CENTER);
         pnlNorth.add(pnlChrstType, BorderLayout.EAST);
@@ -219,7 +231,7 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
         this.add(pnlCenter, BorderLayout.CENTER);
 
         JPanel pnlLoadFile = new JPanel();
-        pnlLoadFile.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlLoadFile.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
         pnlLoadFile.add(txtFldPath, BorderLayout.CENTER);
         pnlLoadFile.add(btnLoadFile, BorderLayout.EAST);
 
@@ -258,7 +270,7 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
             return;
         }
         JButton btn = (JButton) src;
-        if (!RESTConst.BROWSE.equals(btn.getName())) {
+        if (!RestConst.BROWSE.equals(btn.getName())) {
             return;
         }
 
@@ -276,13 +288,13 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
         }
 
         JMenuItem item = (JMenuItem) (src);
-        if (RESTConst.FORMAT.equals(item.getName())) {
+        if (RestConst.FORMAT.equals(item.getName())) {
             String body = RESTUtil.format(txtAraBody.getText());
             txtAraBody.setText(body);
             return;
         }
 
-        if (RESTConst.COPY.equals(item.getName())) {
+        if (RestConst.COPY.equals(item.getName())) {
             StringSelection ss = null;
             String seltxt = txtAraBody.getSelectedText();
             if (StringUtils.isNotBlank(seltxt)) {
@@ -292,18 +304,18 @@ public class ReqBodyPanel extends JPanel implements ActionListener {
             }
 
             Toolkit.getDefaultToolkit()
-                    .getSystemClipboard()
-                    .setContents(ss, null);
+                .getSystemClipboard()
+                .setContents(ss, null);
 
             return;
         }
 
-        if (RESTConst.PASTE.equals(item.getName())) {
+        if (RestConst.PASTE.equals(item.getName())) {
             txtAraBody.paste();
             return;
         }
 
-        if (RESTConst.CLEAR.equals(item.getName())) {
+        if (RestConst.CLEAR.equals(item.getName())) {
             txtAraBody.setText(StringUtils.EMPTY);
             return;
         }

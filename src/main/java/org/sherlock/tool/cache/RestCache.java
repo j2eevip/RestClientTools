@@ -1,21 +1,21 @@
 package org.sherlock.tool.cache;
 
+import java.io.InputStream;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.apache.commons.collections.MapUtils;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.model.Causes;
 import org.sherlock.tool.model.HttpHist;
 import org.sherlock.tool.util.RESTUtil;
 
-import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 /**
  * @author Sherlock
- * @ClassName: RESTCache
+ * @ClassName: RestCache
  * @Description: REST cache
  */
-public class RESTCache {
+public class RestCache {
+
     /**
      * HTTP histories
      */
@@ -36,7 +36,7 @@ public class RESTCache {
     }
 
     public static void setCLIRunning(boolean isCLIRunning) {
-        RESTCache.isCLIRunning = isCLIRunning;
+        RestCache.isCLIRunning = isCLIRunning;
     }
 
     public static Map<String, HttpHist> getHists() {
@@ -45,7 +45,7 @@ public class RESTCache {
 
     public static Causes getCauses() {
         if (null == cs) {
-            InputStream is = RESTUtil.getInputStream(RESTConst.CAUSE_JSON);
+            InputStream is = RESTUtil.getInputStream(RestConst.CAUSE_JSON);
             cs = RESTUtil.toOject(is, Causes.class);
             RESTUtil.close(is);
             if (null == cs || MapUtils.isEmpty(cs.getCauses())) {

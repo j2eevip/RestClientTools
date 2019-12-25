@@ -31,7 +31,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
-import org.sherlock.tool.constant.RESTConst;
+import org.sherlock.tool.constant.RestConst;
 import org.sherlock.tool.gui.RestView;
 import org.sherlock.tool.gui.common.TabModel;
 import org.sherlock.tool.gui.hist.HistView;
@@ -43,6 +43,7 @@ import org.sherlock.tool.model.HttpRsp;
 import org.sherlock.tool.util.RESTUtil;
 
 public class HistFrame extends JFrame implements ActionListener, ChangeListener {
+
     private static final long serialVersionUID = 1394380599441039862L;
 
     private HttpHist hist = null;
@@ -119,24 +120,24 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
     }
 
     private void init() {
-        this.setTitle(RESTConst.HIST_DETAIL);
+        this.setTitle(RestConst.HIST_DETAIL);
         this.setResizable(true);
-        this.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, RESTConst.BORDER_WIDTH));
+        this.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, RestConst.BORDER_WIDTH));
 
         JPanel pnlFrame = new JPanel();
-        pnlFrame.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlFrame.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
 
         // Top UI including HTTP Method and URL
         Panel pnlNorth = new Panel();
 
         // HTTP Method and URL
         cbMtd = new JComboBox<HttpMethod>(HttpMethod.values());
-        cbMtd.setToolTipText(RESTConst.METHOD);
+        cbMtd.setToolTipText(RestConst.METHOD);
         cbUrl = new JComboBox<String>();
         cbUrl.setEditable(true);
-        cbUrl.setToolTipText(RESTConst.URL);
+        cbUrl.setToolTipText(RestConst.URL);
 
-        pnlNorth.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlNorth.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
         pnlNorth.add(cbMtd, BorderLayout.WEST);
         pnlNorth.add(cbUrl, BorderLayout.CENTER);
         pnlFrame.add(pnlNorth, BorderLayout.NORTH);
@@ -146,26 +147,26 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
 
         // HTTP request
         pnlLeft = new JPanel();
-        pnlLeft.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlLeft.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
 
         // HTTP request header
         List<String> colNames = new ArrayList<String>();
-        colNames.add(RESTConst.HEADER);
-        colNames.add(RESTConst.VALUE);
+        colNames.add(RestConst.HEADER);
+        colNames.add(RestConst.VALUE);
 
         tabMdl = new TabModel(colNames);
         tab = new JTable(tabMdl);
         tab.setFillsViewportHeight(true);
         tab.setAutoCreateRowSorter(false);
-        tab.setToolTipText(RESTConst.HTTP_REQ_HEADER);
+        tab.setToolTipText(RestConst.HTTP_REQ_HEADER);
         tab.getTableHeader().setReorderingAllowed(false);
         tab.addMouseListener(ma);
         JScrollPane spHdr = new JScrollPane(tab);
         spHdr.setPreferredSize(new Dimension(300, 0));
 
         // HTTP request body
-        taReqBody = new JTextArea(RESTConst.HIST_AREA_ROWS, 1);
-        taReqBody.setToolTipText(RESTConst.HTTP_REQ_BODY);
+        taReqBody = new JTextArea(RestConst.HIST_AREA_ROWS, 1);
+        taReqBody.setToolTipText(RestConst.HTTP_REQ_BODY);
         JScrollPane spReqBody = new JScrollPane(taReqBody);
         JSplitPane spReq = new JSplitPane(JSplitPane.VERTICAL_SPLIT, spHdr, spReqBody);
         spReq.setResizeWeight(0.3);
@@ -175,17 +176,17 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
 
         // HTTP response
         pnlRight = new JPanel();
-        pnlRight.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlRight.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
 
         // HTTP response status
-        JLabel lblStat = new JLabel(RESTConst.STATUS + ":");
+        JLabel lblStat = new JLabel(RestConst.STATUS + ":");
         txtFldStat = new JTextField();
-        txtFldStat.setToolTipText(RESTConst.HTTP_STATUS);
-        cbAstBody = new JCheckBox(RESTConst.ASSERT_BODY);
-        cbAstBody.setToolTipText(RESTConst.ASSERT_REPBODY);
+        txtFldStat.setToolTipText(RestConst.HTTP_STATUS);
+        cbAstBody = new JCheckBox(RestConst.ASSERT_BODY);
+        cbAstBody.setToolTipText(RestConst.ASSERT_REPBODY);
 
         JPanel pnlRepStat = new JPanel();
-        pnlRepStat.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlRepStat.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
         pnlRepStat.add(lblStat, BorderLayout.WEST);
         pnlRepStat.add(txtFldStat, BorderLayout.CENTER);
         pnlRepStat.add(cbAstBody, BorderLayout.EAST);
@@ -193,16 +194,16 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
 
         // HTTP response body
         tpRepBody = new JTabbedPane();
-        taRepBody = new JTextArea(RESTConst.HIST_AREA_ROWS, 1);
-        taRepBody.setToolTipText(RESTConst.HTTP_REP_BODY);
+        taRepBody = new JTextArea(RestConst.HIST_AREA_ROWS, 1);
+        taRepBody.setToolTipText(RestConst.HTTP_REP_BODY);
         JScrollPane spRepBody = new JScrollPane(taRepBody);
-        tpRepBody.add(RESTConst.TEXT, spRepBody);
+        tpRepBody.add(RestConst.TEXT, spRepBody);
 
         // JSON body
         jsonTree = new JSONTree();
-        jsonTree.setToolTipText(RESTConst.HTTP_REP_BODY);
+        jsonTree.setToolTipText(RestConst.HTTP_REP_BODY);
         jsonTree.setOpaque(true);
-        tpRepBody.add(RESTConst.VIEWER, jsonTree);
+        tpRepBody.add(RestConst.VIEWER, jsonTree);
         tpRepBody.addChangeListener(this);
         pnlRight.add(tpRepBody, BorderLayout.CENTER);
 
@@ -212,9 +213,9 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
         spHist.setContinuousLayout(true);
 
         txtFldDescr = new JTextField();
-        txtFldDescr.setToolTipText(RESTConst.DESCR);
+        txtFldDescr.setToolTipText(RestConst.DESCR);
 
-        pnlCenter.setLayout(new BorderLayout(RESTConst.BORDER_WIDTH, 0));
+        pnlCenter.setLayout(new BorderLayout(RestConst.BORDER_WIDTH, 0));
         pnlCenter.add(spHist, BorderLayout.CENTER);
         pnlCenter.add(txtFldDescr, BorderLayout.SOUTH);
         pnlFrame.add(pnlCenter, BorderLayout.CENTER);
@@ -222,7 +223,7 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
         // Bottom UI
         JPanel pnlSouth = new JPanel();
         pnlSouth.setLayout(new FlowLayout(FlowLayout.CENTER));
-        JButton btnOK = new JButton(RESTConst.OK);
+        JButton btnOK = new JButton(RestConst.OK);
         btnOK.addActionListener(this);
         btnOK.requestFocus();
         getRootPane().setDefaultButton(btnOK);
@@ -230,20 +231,20 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
         pnlFrame.add(pnlSouth, BorderLayout.SOUTH);
 
         this.setContentPane(pnlFrame);
-        this.setIconImage(UIUtil.getImage(RESTConst.LOGO));
-        this.setMinimumSize(new Dimension(RESTConst.HIST_FRAME_WIDTH, RESTConst.HIST_FRAME_HEIGHT));
+        this.setIconImage(UIUtil.getImage(RestConst.LOGO));
+        this.setMinimumSize(new Dimension(RestConst.HIST_FRAME_WIDTH, RestConst.HIST_FRAME_HEIGHT));
         this.pack();
     }
 
     public void initPopupMenu() {
         pm = new JPopupMenu();
 
-        miRmSelHdr = new JMenuItem(RESTConst.RM_SEL);
-        miRmSelHdr.setName(RESTConst.RM_SEL);
+        miRmSelHdr = new JMenuItem(RestConst.RM_SEL);
+        miRmSelHdr.setName(RestConst.RM_SEL);
         miRmSelHdr.addActionListener(this);
 
-        miNewHdr = new JMenuItem(RESTConst.NEW_HDR);
-        miNewHdr.setName(RESTConst.NEW_HDR);
+        miNewHdr = new JMenuItem(RestConst.NEW_HDR);
+        miNewHdr.setName(RestConst.NEW_HDR);
         miNewHdr.addActionListener(this);
 
         pm.add(miNewHdr);
@@ -310,10 +311,10 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
         req.setHeaders(headers);
         req.setBody(this.taReqBody.getText());
         req.getCookies().clear();
-        String ckiHdr = headers.get(RESTConst.COOKIE);
+        String ckiHdr = headers.get(RestConst.COOKIE);
         if (StringUtils.isNotEmpty(ckiHdr)) {
-            String key = RESTConst.EMPTY;
-            String value = RESTConst.EMPTY;
+            String key = RestConst.EMPTY;
+            String value = RestConst.EMPTY;
 
             String[] cookies = StringUtils.split(ckiHdr, ";");
             for (String cookie : cookies) {
@@ -338,7 +339,7 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
 
     private void menuItemPerformed(ActionEvent e) {
         JMenuItem item = (JMenuItem) (e.getSource());
-        if (RESTConst.RM_SEL.equals(item.getName())) {
+        if (RestConst.RM_SEL.equals(item.getName())) {
             int rc = tab.getSelectedRowCount();
             if (rc < 1) {
                 return;
@@ -348,8 +349,8 @@ public class HistFrame extends JFrame implements ActionListener, ChangeListener 
             tabMdl.deleteRow(rows);
         }
 
-        if (RESTConst.NEW_HDR.equals(item.getName())) {
-            tabMdl.insertRow(RESTConst.EMPTY, RESTConst.EMPTY);
+        if (RestConst.NEW_HDR.equals(item.getName())) {
+            tabMdl.insertRow(RestConst.EMPTY, RestConst.EMPTY);
             return;
         }
     }

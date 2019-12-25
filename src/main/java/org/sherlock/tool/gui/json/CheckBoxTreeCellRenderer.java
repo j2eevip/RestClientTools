@@ -1,11 +1,17 @@
 package org.sherlock.tool.gui.json;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.tree.TreeCellRenderer;
-import java.awt.*;
 
 public class CheckBoxTreeCellRenderer extends JPanel implements TreeCellRenderer {
+
     private static final long serialVersionUID = -4024170383791509257L;
 
     protected JCheckBox check;
@@ -21,12 +27,12 @@ public class CheckBoxTreeCellRenderer extends JPanel implements TreeCellRenderer
     }
 
     public Component getTreeCellRendererComponent(JTree tree,
-                                                  Object value,
-                                                  boolean selected,
-                                                  boolean expanded,
-                                                  boolean leaf,
-                                                  int row,
-                                                  boolean hasFocus) {
+        Object value,
+        boolean selected,
+        boolean expanded,
+        boolean leaf,
+        int row,
+        boolean hasFocus) {
         String stringValue = tree.convertValueToText(value, selected, expanded, leaf, row, hasFocus);
         setEnabled(tree.isEnabled());
 
@@ -51,7 +57,7 @@ public class CheckBoxTreeCellRenderer extends JPanel implements TreeCellRenderer
         Dimension dCheck = check.getPreferredSize();
         Dimension dLabel = label.getPreferredSize();
         return new Dimension(dCheck.width + dLabel.width,
-                dCheck.height < dLabel.height ? dLabel.height : dCheck.height);
+            dCheck.height < dLabel.height ? dLabel.height : dCheck.height);
     }
 
     @Override

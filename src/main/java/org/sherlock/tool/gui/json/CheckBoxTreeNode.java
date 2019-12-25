@@ -3,6 +3,7 @@ package org.sherlock.tool.gui.json;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public class CheckBoxTreeNode extends DefaultMutableTreeNode {
+
     private static final long serialVersionUID = 4611002678269395854L;
 
     protected boolean selected;
